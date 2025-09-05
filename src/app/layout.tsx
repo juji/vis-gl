@@ -4,7 +4,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import 'sanitize.css';
 import 'sanitize.css/forms.css';
 import 'sanitize.css/typography.css';
+import 'sanitize.css/asset.css';
 import "./globals.css";
+import 'sanitize.css/reduce-motion.css';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
