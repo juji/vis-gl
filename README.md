@@ -11,6 +11,7 @@ NextJS v15
 - sanitize.css https://github.com/csstools/sanitize.css
 - PWA support using serwist: https://serwist.pages.dev
 - CORS headers for CloudFlare static, Netlify, and Vercel
+- husky for pre-commit hooks
 
 ## Getting Started
 
