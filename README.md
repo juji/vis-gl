@@ -10,6 +10,7 @@ NextJS v15
 - favicons, generated using https://realfavicongenerator.net
 - sanitize.css
 - PWA support using serwist: https://serwist.pages.dev
+- CORS headers for CloudFlare static, Netlify, and Vercel
 
 ## Getting Started
 
