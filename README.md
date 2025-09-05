@@ -8,7 +8,7 @@ NextJS v15
 
 - uses pnpm
 - favicons, generated using https://realfavicongenerator.net
-- sanitize.css
+- sanitize.css https://github.com/csstools/sanitize.css
 - PWA support using serwist: https://serwist.pages.dev
 - CORS headers for CloudFlare static, Netlify, and Vercel
 
