@@ -8,7 +8,8 @@ NextJS v15
 
 - uses pnpm
 - favicons, generated using https://realfavicongenerator.net
-- sanitize.css
+- sanitize.
+- PWA support using serwist
 
 ## Getting Started
 
