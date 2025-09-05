@@ -12,6 +12,7 @@ NextJS v15
 - PWA support using serwist: https://serwist.pages.dev
 - CORS headers for CloudFlare static, Netlify, and Vercel
 - husky for pre-commit hooks
+- lint-staged for running things on staged files
 
 ## Getting Started
 
