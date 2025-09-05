@@ -1,2 +1,4 @@
 # if you have tests
 # pnpm test
+
+echo "Doing nothing for pre-commit"
