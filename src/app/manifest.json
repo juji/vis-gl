@@ -1,6 +1,6 @@
 {
-  "name": "MyWebSite",
-  "short_name": "MySite",
+  "name": "Juji",
+  "short_name": "Juji",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
@@ -17,5 +17,6 @@
   ],
   "theme_color": "#000000",
   "background_color": "#000000",
-  "display": "standalone"
+  "display": "standalone",
+  "orientation": "portrait"
 }
