@@ -27,7 +27,7 @@ export default function Sidebar({ className = "" }: SidebarProps) {
       </button>
 
       {isOpen && (
-        // biome-ignore lint/a11y/useSemanticElements: just because
+        // biome-ignore lint/a11y/useSemanticElements: just no
         <div
           className={styles.overlay}
           onClick={() => setIsOpen(false)}
