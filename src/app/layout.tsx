@@ -8,6 +8,8 @@ import "sanitize.css/assets.css";
 import "./globals.css";
 import "sanitize.css/reduce-motion.css";
 
+import Sidebar from "../components/sidebar";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -31,7 +33,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
+        <div className="main-layout">
+          <Sidebar />
+          <main className="main-content">{children}</main>
+        </div>
       </body>
     </html>
   );
