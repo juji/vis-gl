@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import styles from "./styles.module.css";
 
 interface SidebarProps {
@@ -10,35 +11,35 @@ export default function Sidebar({ className = "" }: SidebarProps) {
   return (
     <aside className={`${styles.sidebar} ${className}`}>
       <div className={styles.sidebarHeader}>
-        <h2>vis.gl</h2>
+        <h2>vis.gl Experiments</h2>
       </div>
 
       <nav className={styles.sidebarNav}>
         <ul>
           <li>
-            <a href="#overview" className={styles.navLink}>
+            <Link href="/" className={styles.navLink}>
               Overview
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="#examples" className={styles.navLink}>
+            <Link href="/examples" className={styles.navLink}>
               Examples
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="#documentation" className={styles.navLink}>
+            <Link href="/documentation" className={styles.navLink}>
               Documentation
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="#components" className={styles.navLink}>
+            <Link href="/components" className={styles.navLink}>
               Components
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="#settings" className={styles.navLink}>
+            <Link href="/settings" className={styles.navLink}>
               Settings
-            </a>
+            </Link>
           </li>
         </ul>
       </nav>
