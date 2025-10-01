@@ -4,7 +4,7 @@ import withSerwistInit from "@serwist/next";
 
 
 const nextConfig: NextConfig = {
-  // output: "export",
+  output: "export",
 
   // Add any custom Next.js config here if needed
   devIndicators: false,
@@ -36,6 +36,7 @@ const withSerwist = withSerwistInit({
   // use something else that works, such as "service-worker/index.ts".
   swSrc: "src/app/sw.ts",
   swDest: "public/sw.js",
+  disable: process.env.NODE_ENV !== "production"
 });
 
 export default withSerwist(nextConfig);
