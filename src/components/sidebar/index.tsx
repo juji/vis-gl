@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "./sidebar.module.css";
+import styles from "./styles.module.css";
 
 interface SidebarProps {
   className?: string;
