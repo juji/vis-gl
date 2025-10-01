@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
 import styles from "./styles.module.css";
 
 interface SidebarProps {
@@ -8,45 +10,76 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ className = "" }: SidebarProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
+
   return (
-    <aside className={`${styles.sidebar} ${className}`}>
-      <div className={styles.sidebarHeader}>
-        <h2>vis.gl Experiments</h2>
-      </div>
+    <>
+      <button
+        type="button"
+        className={`${styles.toggle} ${isOpen ? styles.toggleOpen : ""}`}
+        onClick={() => setIsOpen(!isOpen)}
+        aria-label="Toggle menu"
+      >
+        <span />
+        <span />
+        <span />
+      </button>
 
-      <nav className={styles.sidebarNav}>
-        <ul>
-          <li>
-            <Link href="/" className={styles.navLink}>
-              Overview
-            </Link>
-          </li>
-          <li>
-            <Link href="/examples" className={styles.navLink}>
-              Examples
-            </Link>
-          </li>
-          <li>
-            <Link href="/documentation" className={styles.navLink}>
-              Documentation
-            </Link>
-          </li>
-          <li>
-            <Link href="/components" className={styles.navLink}>
-              Components
-            </Link>
-          </li>
-          <li>
-            <Link href="/settings" className={styles.navLink}>
-              Settings
-            </Link>
-          </li>
-        </ul>
-      </nav>
+      {isOpen && (
+        // biome-ignore lint/a11y/useSemanticElements: just because
+        <div
+          className={styles.overlay}
+          onClick={() => setIsOpen(false)}
+          onKeyDown={(e) => e.key === "Escape" && setIsOpen(false)}
+          role="button"
+          tabIndex={0}
+          aria-label="Close sidebar"
+        />
+      )}
 
-      <div className={styles.sidebarFooter}>
-        <p className={styles.version}>v1.0.0</p>
-      </div>
-    </aside>
+      <aside
+        className={`${styles.sidebar} ${isOpen ? styles.open : ""} ${className}`}
+      >
+        <div className={styles.header}>
+          <h2>vis.gl Experiments</h2>
+        </div>
+
+        <nav className={styles.nav}>
+          <Link
+            href="/"
+            onClick={() => setIsOpen(false)}
+            className={pathname === "/" ? styles.active : ""}
+          >
+            Overview
+          </Link>
+          <Link
+            href="/examples"
+            onClick={() => setIsOpen(false)}
+            className={pathname === "/examples" ? styles.active : ""}
+          >
+            Examples
+          </Link>
+          <Link
+            href="/docs"
+            onClick={() => setIsOpen(false)}
+            className={pathname === "/docs" ? styles.active : ""}
+          >
+            Documentation
+          </Link>
+          <Link
+            href="/components"
+            onClick={() => setIsOpen(false)}
+            className={pathname === "/components" ? styles.active : ""}
+          >
+            Components
+          </Link>
+        </nav>
+
+        <div className={styles.footer}>
+          <span>v1.0.0</span>
+        </div>
+      </aside>
+    </>
   );
 }
