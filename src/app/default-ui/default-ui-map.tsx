@@ -2,6 +2,6 @@
 
 import { SimpleMap } from "@/components/maps/simple";
 
-export function UiMap() {
+export function DefaultUiMap() {
   return <SimpleMap disableDefaultUI={false} height="500px" />;
 }

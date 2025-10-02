@@ -1,11 +1,11 @@
 import { Code } from "@/components/code";
-import { UiMap } from "./ui-map";
+import { DefaultUiMap } from "./default-ui-map";
 
-export default function MarkerPage() {
+export default function DefaultUiPage() {
   return (
     <>
       <h1>Default UI</h1>
-      <UiMap />
+      <DefaultUiMap />
       <br />
       <Code lang="tsx">{`
       <SimpleMap disableDefaultUI={false} height="500px" />

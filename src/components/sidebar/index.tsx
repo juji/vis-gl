@@ -21,7 +21,7 @@ const Links: MenuItem[] = [
   { href: "/tracking-changes", label: "Tracking Changes" },
   {
     label: "UI",
-    children: [{ href: "/ui", label: "Default UI" }],
+    children: [{ href: "/default-ui", label: "Default UI" }],
   },
   {
     label: "Markers",
