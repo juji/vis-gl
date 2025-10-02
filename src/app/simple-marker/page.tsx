@@ -19,12 +19,23 @@ export default function MarkerPage() {
         setCenter(ev.detail.latLng);
       }
 
+      function onDrag(e: google.maps.MapMouseEvent) {
+        setCenter(e.latLng?.toJSON() || null);
+      }
+
       // ...
 
       <SimpleMap
         onClick={onClick}
         height="500px"
-      ><Marker position={center} /></SimpleMap>
+      ><Marker
+        position={center} 
+        clickable={true}
+        draggable={true}
+        onDrag={onDrag}
+        onClick={() => alert('marker was clicked!')}
+        title={'clickable, draggable google.maps.Marker'}
+      /></SimpleMap>
     `}</Code>
     </>
   );

@@ -12,6 +12,10 @@ export function DrawMarker() {
     setCenter(ev.detail.latLng);
   }
 
+  function onDrag(e: google.maps.MapMouseEvent) {
+    setCenter(e.latLng?.toJSON() || null);
+  }
+
   return (
     <>
       <div
@@ -25,7 +29,7 @@ export function DrawMarker() {
         }}
       >
         <div>
-          <b>Note the initial values</b>
+          <b>Note the initial values, You can drag and click.</b>
         </div>
         <div>Center: {JSON.stringify(center)}</div>
       </div>
@@ -33,7 +37,14 @@ export function DrawMarker() {
       <br />
 
       <SimpleMap onClick={onClick} height="500px">
-        <Marker position={center} />
+        <Marker
+          position={center}
+          clickable={true}
+          draggable={true}
+          onDrag={onDrag}
+          onClick={() => alert("marker was clicked!")}
+          title={"clickable, draggable google.maps.Marker"}
+        />
       </SimpleMap>
     </>
   );
