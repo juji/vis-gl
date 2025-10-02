@@ -4,7 +4,7 @@ import { DrawMarker } from "./marker";
 export default function MarkerPage() {
   return (
     <>
-      <h1>Drawing Marker</h1>
+      <h1>Simple Marker</h1>
       <p>Click to draw Marker</p>
       <br />
       <DrawMarker />
