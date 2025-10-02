@@ -19,21 +19,9 @@ interface MenuItem {
 const Links: MenuItem[] = [
   { href: "/", label: "Simple" },
   { href: "/tracking-changes", label: "Tracking Changes" },
-  { href: "/draw-marker", label: "Draw Marker" },
   {
-    label: "Components",
-    children: [
-      { href: "/components/sidebar", label: "Sidebar" },
-      { href: "/components/navbar", label: "Navbar", newTab: true },
-      { href: "/components/footer", label: "Footer" },
-      {
-        label: "Custom",
-        children: [
-          { href: "/components/custom/card", label: "Card" },
-          { href: "/components/custom/button", label: "Button" },
-        ],
-      },
-    ],
+    label: "Markers",
+    children: [{ href: "/draw-marker", label: "Simple Marker" }],
   },
 ];
 
