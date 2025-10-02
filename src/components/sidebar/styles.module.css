@@ -43,6 +43,7 @@
   font-size: 0.875rem;
   transition: all 0.2s;
   border-left: 3px solid transparent;
+  border-bottom: unset;
 }
 
 .nav a:hover {
