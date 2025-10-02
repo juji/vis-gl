@@ -14,17 +14,14 @@ export default function Home() {
         defaultCenter={{ lat: -6.178306, lng: 106.631889 }}
       />
       <br />
-      <Code
-        lang="tsx"
-        code={`
-import { SimpleMap } from "@/components/maps/simple";
+      <Code lang="tsx" clean="        ">{`
+        import { SimpleMap } from "@/components/maps/simple";
 
-<SimpleMap 
-  height="500px" 
-  defaultCenter={{ lat: -6.178306, lng: 106.631889 }} 
-/>
-`}
-      />
+        <SimpleMap 
+          height="500px" 
+          defaultCenter={{ lat: -6.178306, lng: 106.631889 }} 
+        />
+      `}</Code>
       <br />
       <Link
         target="_blank"

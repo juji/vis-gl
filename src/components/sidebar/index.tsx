@@ -9,6 +9,13 @@ interface SidebarProps {
   className?: string;
 }
 
+const Links = [
+  { href: "/", label: "Simple" },
+  { href: "/tracking-changes", label: "Tracking Changes" },
+  { href: "/docs", label: "Documentation" },
+  { href: "/components", label: "Components" },
+];
+
 export default function Sidebar({ className = "" }: SidebarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
@@ -46,34 +53,16 @@ export default function Sidebar({ className = "" }: SidebarProps) {
         </div>
 
         <nav className={styles.nav}>
-          <Link
-            href="/"
-            onClick={() => setIsOpen(false)}
-            className={pathname === "/" ? styles.active : ""}
-          >
-            Simple
-          </Link>
-          <Link
-            href="/examples"
-            onClick={() => setIsOpen(false)}
-            className={pathname === "/examples" ? styles.active : ""}
-          >
-            Examples
-          </Link>
-          <Link
-            href="/docs"
-            onClick={() => setIsOpen(false)}
-            className={pathname === "/docs" ? styles.active : ""}
-          >
-            Documentation
-          </Link>
-          <Link
-            href="/components"
-            onClick={() => setIsOpen(false)}
-            className={pathname === "/components" ? styles.active : ""}
-          >
-            Components
-          </Link>
+          {Links.map(({ href, label }) => (
+            <Link
+              key={href}
+              href={href}
+              onClick={() => setIsOpen(false)}
+              className={pathname === href ? styles.active : ""}
+            >
+              {label}
+            </Link>
+          ))}
         </nav>
 
         <div className={styles.footer}>

@@ -3,15 +3,17 @@ import { codeToHtml } from "shiki";
 import styles from "./styles.module.css";
 
 export async function Code({
-  code,
+  children,
+  clean,
   lang = "typescript",
   theme = "aurora-x",
 }: {
-  code: string;
+  children: string;
+  clean?: string;
   lang?: BundledLanguage;
   theme?: BundledTheme;
 }) {
-  const html = await codeToHtml(code.trim(), {
+  const html = await codeToHtml(children.trim().replaceAll(clean || "", ""), {
     lang,
     theme,
   });
