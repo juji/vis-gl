@@ -37,23 +37,74 @@
   overflow-y: auto;
 }
 
-.nav a {
+.menuItem {
   padding: 0.75rem 1.5rem;
   color: #a1a1aa;
   font-size: 0.875rem;
   transition: all 0.2s;
   border-left: 3px solid transparent;
   border-bottom: unset;
+  text-decoration: none;
+  display: block;
 }
 
-.nav a:hover {
+.menuItem:hover {
   background: #1a1a1a;
   color: #fff;
   border-left-color: #3b82f6;
 }
 
-.nav a.active {
+.menuItem.active {
   color: #fff;
+  background: #1a1a1a;
+  border-left-color: #3b82f6;
+}
+
+.menuButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.menuButton:hover {
+  background: #1a1a1a;
+}
+
+.menuLabel {
+  flex: 1;
+}
+
+.expandIcon {
+  font-size: 0.75rem;
+  color: #71717a;
+  transition: transform 0.3s ease;
+  margin-left: 0.5rem;
+}
+
+.expandIcon.expanded {
+  transform: rotate(90deg);
+}
+
+.submenu {
+  background: #0f0f0f;
+}
+
+.nested {
+  font-size: 0.8125rem;
+  color: #d1d5db;
+}
+
+.nested:hover {
+  color: #fff;
+}
+
+.menuGroup {
+  border-bottom: 1px solid #1a1a1a;
 }
 
 .footer {
