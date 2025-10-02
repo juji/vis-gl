@@ -92,6 +92,17 @@
 
 .submenu {
   background: #0f0f0f;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition:
+    max-height 0.4s ease-in-out,
+    opacity 0.3s ease-in-out;
+}
+
+.submenuOpen {
+  max-height: 1000px;
+  opacity: 1;
 }
 
 .nested {
