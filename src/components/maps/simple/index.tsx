@@ -1,9 +1,5 @@
 "use client";
 
-/*
-https://visgl.github.io/react-google-maps/docs/api-reference/components/map
-*/
-
 import {
   APIProvider,
   type ColorScheme,
@@ -14,6 +10,10 @@ import {
   RenderingType,
 } from "@vis.gl/react-google-maps";
 
+// why this much params? as a reminder
+// https://developers.google.com/maps/documentation/javascript/reference/map
+// https://visgl.github.io/react-google-maps/docs/api-reference/components/map
+// real-world scenarios should not use all of these props
 export type SimpleMapProps = {
   // General Props
   id?: string;
@@ -118,7 +118,10 @@ export function SimpleMap(props: SimpleMapProps) {
     gestureHandling: _,
     reuseMaps: __,
     renderingType = RenderingType.VECTOR,
+
+    // tangerang, banten, indonesia
     defaultCenter = { lat: -6.178306, lng: 106.631889 },
+
     defaultZoom = 7,
     disableDefaultUI = true,
     ...mapProps

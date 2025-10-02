@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Code } from "@/components/code";
 import { SimpleMap } from "@/components/maps/simple";
 
@@ -17,6 +18,14 @@ import { SimpleMap } from "@/components/maps/simple";
 <SimpleMap height="500px" />
 `}
       />
+      <br />
+      <Link
+        target="_blank"
+        rel="noopener noreferrer"
+        href="https://github.com/juji/vis-gl/blob/main/src/components/maps/simple/index.tsx"
+      >
+        Code
+      </Link>
     </>
   );
 }

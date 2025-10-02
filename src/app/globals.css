@@ -78,6 +78,10 @@ a {
   }
 }
 
+a {
+  border-bottom: #d5d5d5 dotted 1px;
+}
+
 /* this is commented, but i don't want to forget */
 /* 
 @media (prefers-color-scheme: dark) {
