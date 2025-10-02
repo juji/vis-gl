@@ -51,7 +51,7 @@ export default function Sidebar({ className = "" }: SidebarProps) {
             onClick={() => setIsOpen(false)}
             className={pathname === "/" ? styles.active : ""}
           >
-            Overview
+            Simple
           </Link>
           <Link
             href="/examples"
