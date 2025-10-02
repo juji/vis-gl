@@ -10,6 +10,18 @@ export default function TrackingChanges() {
       <Changes />
       <br />
       <Code lang="tsx" clean="      ">{`
+      function onCenterChanged(ev: MapCameraChangedEvent) {
+        setCenter(ev.detail.center);
+      }
+    
+      function onZoomChanged(ev: MapCameraChangedEvent) {
+        setZoom(ev.detail.zoom);
+      }
+    
+      function onBoundsChanged(ev: MapCameraChangedEvent) {
+        setBounds(ev.detail.bounds);
+      }
+
       <SimpleMap
         onCenterChanged={onCenterChanged}
         onZoomChanged={onZoomChanged}
