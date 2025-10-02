@@ -141,8 +141,9 @@ export function SimpleMap(props: SimpleMapProps) {
         }}
         gestureHandling="greedy"
         reuseMaps={true}
-      />
-      {children}
+      >
+        {children}
+      </GoogleMap>
     </APIProvider>
   );
 }

@@ -12,7 +12,7 @@ interface SidebarProps {
 const Links = [
   { href: "/", label: "Simple" },
   { href: "/tracking-changes", label: "Tracking Changes" },
-  { href: "/docs", label: "Documentation" },
+  { href: "/draw-marker", label: "Draw Marker" },
   { href: "/components", label: "Components" },
 ];
 

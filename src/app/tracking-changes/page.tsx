@@ -10,6 +10,10 @@ export default function TrackingChanges() {
       <Changes />
       <br />
       <Code lang="tsx" clean="      ">{`
+      import type { MapCameraChangedEvent } from "@vis.gl/react-google-maps";
+
+      // ...
+
       function onCenterChanged(ev: MapCameraChangedEvent) {
         setCenter(ev.detail.center);
       }
@@ -22,10 +26,13 @@ export default function TrackingChanges() {
         setBounds(ev.detail.bounds);
       }
 
+      // ...
+
       <SimpleMap
         onCenterChanged={onCenterChanged}
         onZoomChanged={onZoomChanged}
         onBoundsChanged={onBoundsChanged}
+        height="500px"
       />
     `}</Code>
     </>
