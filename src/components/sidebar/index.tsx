@@ -78,7 +78,7 @@ export default function Sidebar({ className = "" }: SidebarProps) {
             <span
               className={`${styles.expandIcon} ${isExpanded ? styles.expanded : ""}`}
             >
-              ▶
+              ›
             </span>
           </button>
           {isExpanded && (
