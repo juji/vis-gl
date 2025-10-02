@@ -5,9 +5,9 @@ export default function Home() {
   return (
     <>
       <h1>Simple Map Example</h1>
-      <p>Just a simple 400px height map</p>
+      <p>Just a simple 500px height map</p>
       <br />
-      <SimpleMap height="400px" />
+      <SimpleMap height="500px" />
       <br />
       <Code
         lang="tsx"
