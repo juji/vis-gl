@@ -20,7 +20,7 @@ export default function CustomUiPlacementPage() {
       </p>
       <p>
         For this example, <code>fullscreenControl</code> and{" "}
-        <code>fullscreenControlOptions</code> is already available.
+        <code>fullscreenControlOptions</code> are already available.
       </p>
       <br />
       <Code lang="tsx" clean="      ">{`
