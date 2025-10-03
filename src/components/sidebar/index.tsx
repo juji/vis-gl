@@ -38,8 +38,22 @@ function MenuItemComponent({
   level?: number;
   onLinkClick: () => void;
 }) {
-  const [isExpanded, setIsExpanded] = useState(false);
   const pathname = usePathname();
+
+  const hasActiveDescendant = (menuItem: MenuItem): boolean => {
+    if (menuItem.href === pathname) return true;
+    if (menuItem.children) {
+      return menuItem.children.some(hasActiveDescendant);
+    }
+    return false;
+  };
+
+  const [isExpanded, setIsExpanded] = useState(() => {
+    if (item.children && item.children.length > 0) {
+      return item.children.some(hasActiveDescendant);
+    }
+    return false;
+  });
   const hasChildren = item.children && item.children.length > 0;
   const isActive = item.href === pathname;
 
