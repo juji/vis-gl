@@ -1,5 +1,6 @@
 "use client";
 
+import { ControlPosition } from "@vis.gl/react-google-maps";
 import { SimpleMap } from "@/components/maps/simple";
 
 export function CustomUiPlacement() {
@@ -7,7 +8,7 @@ export function CustomUiPlacement() {
     <SimpleMap
       fullscreenControl={true}
       fullscreenControlOptions={{
-        position: google.maps.ControlPosition.BOTTOM_RIGHT,
+        position: ControlPosition.BOTTOM_RIGHT,
       }}
       height="500px"
     />

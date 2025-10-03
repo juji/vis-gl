@@ -16,13 +16,11 @@ export default function CustomUiPage() {
       </p>
       <br />
       <Code lang="tsx" clean="      ">{`
-      <SimpleMap 
-        fullscreenControl={true}
-        fullscreenControlOptions={{
-          position: google.maps.ControlPosition.BOTTOM_RIGHT,
-        }}
-        height="500px" 
-      />;
+      <SimpleMap height="500px">
+        <MapControl position={ControlPosition.BOTTOM_CENTER}>
+          <JoystickControl />
+        </MapControl>
+      </SimpleMap>
     `}</Code>
     </>
   );

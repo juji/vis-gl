@@ -16,10 +16,14 @@ export default function CustomUiPlacementPage() {
       </p>
       <br />
       <Code lang="tsx" clean="      ">{`
+      import { ControlPosition } from "@vis.gl/react-google-maps";
+
+      //...
+      
       <SimpleMap 
         fullscreenControl={true}
         fullscreenControlOptions={{
-          position: google.maps.ControlPosition.BOTTOM_RIGHT,
+          position: ControlPosition.BOTTOM_RIGHT,
         }}
         height="500px" 
       />;
