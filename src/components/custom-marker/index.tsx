@@ -92,46 +92,47 @@ export default function CustomMarker({
   };
 
   return (
-    <button
-      className={`${styles.customMarker} ${className} ${animation !== "none" ? styles[animation] : ""}`}
-      style={{
-        position: "absolute",
-        left: "50%",
-        bottom: "0%",
-        transform: "translate(-50%, 0%)",
-        zIndex: 100,
-        cursor: "pointer",
-        border: "none",
-        background: "none",
-        padding: 0,
-      }}
-      onClick={handleClick}
-      onKeyDown={handleKeyDown}
-      title={title}
-      type="button"
-    >
-      <svg
-        width={size}
-        height={size}
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        className={styles.markerIcon}
-        aria-label="Map marker"
+    <>
+      <button
+        className={`${styles.customMarker} ${className} ${animation !== "none" ? styles[animation] : ""}`}
+        style={{
+          position: "absolute",
+          left: "50%",
+          bottom: "0%",
+          transform: "translate(-50%, 0%)",
+          zIndex: 100,
+          cursor: "pointer",
+          border: "none",
+          background: "none",
+          padding: 0,
+        }}
+        onClick={handleClick}
+        onKeyDown={handleKeyDown}
+        title={title}
+        type="button"
       >
-        <title>Map marker</title>
-        {/* Pin shape */}
-        <path
-          d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
-          fill={color}
-          stroke="white"
-          strokeWidth="1"
-        />
-        {/* Pin point */}
-        <circle cx="12" cy="9" r="3" fill="white" />
-      </svg>
-
+        <svg
+          width={size}
+          height={size}
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className={styles.markerIcon}
+          aria-label="Map marker"
+        >
+          <title>Map marker</title>
+          {/* Pin shape */}
+          <path
+            d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
+            fill={color}
+            stroke="white"
+            strokeWidth="1"
+          />
+          {/* Pin point */}
+          <circle cx="12" cy="9" r="3" fill="white" />
+        </svg>
+      </button>
       {showTooltip && <MarkerTooltip onClose={() => setShowTooltip(false)} />}
-    </button>
+    </>
   );
 }

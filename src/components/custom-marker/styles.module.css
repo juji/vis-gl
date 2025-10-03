@@ -57,7 +57,7 @@
 /* Tooltip styles */
 .tooltip {
   position: absolute;
-  bottom: calc(100% + 8px);
+  bottom: calc(100% + 62px);
   left: 50%;
   transform: translateX(-50%);
   background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
