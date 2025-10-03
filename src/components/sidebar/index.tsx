@@ -23,7 +23,7 @@ const Links: MenuItem[] = [
     label: "UI",
     children: [
       { href: "/default-ui", label: "Default UI" },
-      { href: "/custom-ui-placement", label: "Custom UI Placement" },
+      { href: "/ui-placement", label: "UI Placement" },
       { href: "/custom-ui", label: "Custom UI" },
     ],
   },
