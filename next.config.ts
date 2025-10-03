@@ -2,9 +2,9 @@ import withSerwistInit from "@serwist/next";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: "export",
+  // output: "export",
 
-  images: { unoptimized: true },
+  // images: { unoptimized: true },
 
   // Add any custom Next.js config here if needed
   devIndicators: false,
