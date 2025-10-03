@@ -53,7 +53,7 @@ function JoystickControl() {
             const deltaLng = metersX / metersPerDegreeLng;
 
             // Calculate new position
-            const newLat = latitude + deltaLat;
+            const newLat = latitude - deltaLat;
             const newLng = center.lng() + deltaLng;
 
             // Set new center
