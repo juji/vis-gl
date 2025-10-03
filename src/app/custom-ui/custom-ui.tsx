@@ -25,10 +25,9 @@ function JoystickControl() {
         const center = map.getCenter();
         const zoom = map.getZoom();
         if (!center || !zoom) return;
+        raf.current = requestAnimationFrame(move);
 
         const { x, y } = xy.current;
-
-        raf.current = requestAnimationFrame(move);
 
         const latitude = center.lat();
         const latRad = (latitude * Math.PI) / 180;
