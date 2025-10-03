@@ -66,7 +66,6 @@ function JoystickControl() {
   );
 
   const handleJoystickRelease = useCallback(() => {
-    // No action needed on release
     xy.current = { x: 0, y: 0 };
     if (raf.current) {
       cancelAnimationFrame(raf.current);
