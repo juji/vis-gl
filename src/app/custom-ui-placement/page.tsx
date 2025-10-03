@@ -14,14 +14,6 @@ export default function CustomUiPlacementPage() {
           https://developers.google.com/maps/documentation/javascript/controls
         </Link>
       </p>
-      <p>
-        Some controls may not be available on SimpleMap, that you have to add it
-        to SimpleMap's definition.
-      </p>
-      <p>
-        For this example, <code>fullscreenControl</code> and{" "}
-        <code>fullscreenControlOptions</code> are already available.
-      </p>
       <br />
       <Code lang="tsx" clean="      ">{`
       <SimpleMap 
