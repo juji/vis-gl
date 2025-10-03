@@ -10,8 +10,12 @@ export default function CustomUiPage() {
       <br />
       <p>
         Read all about it:{" "}
-        <Link href="https://developers.google.com/maps/documentation/javascript/controls">
-          https://developers.google.com/maps/documentation/javascript/controls
+        <Link
+          href="https://visgl.github.io/react-google-maps/docs/api-reference/components/map-control"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          https://visgl.github.io/react-google-maps/docs/api-reference/components/map-control
         </Link>
       </p>
       <br />

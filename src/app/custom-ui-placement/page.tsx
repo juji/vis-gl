@@ -10,7 +10,11 @@ export default function CustomUiPlacementPage() {
       <br />
       <p>
         Read all about it:{" "}
-        <Link href="https://developers.google.com/maps/documentation/javascript/controls">
+        <Link
+          href="https://developers.google.com/maps/documentation/javascript/controls"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           https://developers.google.com/maps/documentation/javascript/controls
         </Link>
       </p>
@@ -19,7 +23,7 @@ export default function CustomUiPlacementPage() {
       import { ControlPosition } from "@vis.gl/react-google-maps";
 
       //...
-      
+
       <SimpleMap 
         fullscreenControl={true}
         fullscreenControlOptions={{
