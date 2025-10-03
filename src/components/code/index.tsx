@@ -13,10 +13,17 @@ export async function Code({
   lang?: BundledLanguage;
   theme?: BundledTheme;
 }) {
-  const html = await codeToHtml(children.trim().replaceAll(clean || "", ""), {
-    lang,
-    theme,
-  });
+  const html = await codeToHtml(
+    children
+      .trim()
+      .split("\n")
+      .map((v) => v.replace(clean || "", ""))
+      .join("\n"),
+    {
+      lang,
+      theme,
+    },
+  );
 
   return (
     <div

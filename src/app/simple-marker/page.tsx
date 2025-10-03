@@ -11,7 +11,8 @@ export default function MarkerPage() {
       <br />
       <Code lang="tsx" clean="      ">{`
       import type { MapMouseEvent } from "@vis.gl/react-google-maps";
-      import { Marker } from '@vis.gl/react-google-maps';
+      // import { Marker } from '@vis.gl/react-google-maps'; // deprecated
+      import { AdvancedMarker } from '@vis.gl/react-google-maps';
 
       // ...
 
@@ -24,10 +25,13 @@ export default function MarkerPage() {
       }
 
       // ...
-
-      <SimpleMap onClick={onClick} height="500px">
-        <Marker
-          position={location}
+      <SimpleMap 
+        onClick={onClick} 
+        height="500px" 
+        mapId={id} // Advance Marker needs mapId to be set
+      >
+        <AdvancedMarker 
+          position={location} 
           clickable={true}
           draggable={true}
           onDrag={onDrag}

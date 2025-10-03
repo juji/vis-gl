@@ -1,11 +1,13 @@
 "use client";
 
 import type { MapMouseEvent } from "@vis.gl/react-google-maps";
-import { Marker } from "@vis.gl/react-google-maps";
-import { useState } from "react";
+import { AdvancedMarker } from "@vis.gl/react-google-maps";
+import { useId, useState } from "react";
 import { SimpleMap } from "@/components/maps/simple";
 
 export function DrawMarker() {
+  const id = useId();
+
   const [location, setLocation] = useState<google.maps.LatLngLiteral | null>(
     null,
   );
@@ -38,8 +40,8 @@ export function DrawMarker() {
 
       <br />
 
-      <SimpleMap onClick={onClick} height="500px">
-        <Marker
+      <SimpleMap onClick={onClick} height="500px" mapId={id}>
+        <AdvancedMarker
           position={location}
           clickable={true}
           draggable={true}

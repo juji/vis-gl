@@ -29,7 +29,10 @@ const Links: MenuItem[] = [
   },
   {
     label: "Markers",
-    children: [{ href: "/simple-marker", label: "Simple Marker" }],
+    children: [
+      { href: "/simple-marker", label: "Simple Marker" },
+      { href: "/advance-marker", label: "Advance Marker" },
+    ],
   },
 ];
 
