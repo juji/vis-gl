@@ -6,14 +6,16 @@ import { useState } from "react";
 import { SimpleMap } from "@/components/maps/simple";
 
 export function DrawMarker() {
-  const [center, setCenter] = useState<google.maps.LatLngLiteral | null>(null);
+  const [location, setLocation] = useState<google.maps.LatLngLiteral | null>(
+    null,
+  );
 
   function onClick(ev: MapMouseEvent) {
-    setCenter(ev.detail.latLng);
+    setLocation(ev.detail.latLng);
   }
 
   function onDrag(e: google.maps.MapMouseEvent) {
-    setCenter(e.latLng?.toJSON() || null);
+    setLocation(e.latLng?.toJSON() || null);
   }
 
   return (
@@ -31,14 +33,14 @@ export function DrawMarker() {
         <div>
           <b>Note the initial values, You can drag and click.</b>
         </div>
-        <div>Center: {JSON.stringify(center)}</div>
+        <div>Location: {JSON.stringify(location)}</div>
       </div>
 
       <br />
 
       <SimpleMap onClick={onClick} height="500px">
         <Marker
-          position={center}
+          position={location}
           clickable={true}
           draggable={true}
           onDrag={onDrag}

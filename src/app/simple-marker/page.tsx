@@ -16,11 +16,11 @@ export default function MarkerPage() {
       // ...
 
       function onClick(ev: MapMouseEvent) {
-        setCenter(ev.detail.latLng);
+        setLocation(ev.detail.latLng);
       }
 
       function onDrag(e: google.maps.MapMouseEvent) {
-        setCenter(e.latLng?.toJSON() || null);
+        setLocation(e.latLng?.toJSON() || null);
       }
 
       // ...
@@ -29,7 +29,7 @@ export default function MarkerPage() {
         onClick={onClick}
         height="500px"
       ><Marker
-        position={center} 
+        position={location} 
         clickable={true}
         draggable={true}
         onDrag={onDrag}
