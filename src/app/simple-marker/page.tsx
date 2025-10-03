@@ -25,17 +25,16 @@ export default function MarkerPage() {
 
       // ...
 
-      <SimpleMap
-        onClick={onClick}
-        height="500px"
-      ><Marker
-        position={location} 
-        clickable={true}
-        draggable={true}
-        onDrag={onDrag}
-        onClick={() => alert('marker was clicked!')}
-        title={'clickable, draggable google.maps.Marker'}
-      /></SimpleMap>
+      <SimpleMap onClick={onClick} height="500px">
+        <Marker
+          position={location}
+          clickable={true}
+          draggable={true}
+          onDrag={onDrag}
+          onClick={() => alert("marker was clicked!")}
+          title={"clickable, draggable google.maps.Marker"}
+        />
+      </SimpleMap>
     `}</Code>
     </>
   );
