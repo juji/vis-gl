@@ -93,13 +93,16 @@ export function Joystick({
     handleStart(e.clientX, e.clientY);
   };
 
-  const handleMouseMove = (e: MouseEvent) => {
-    handleMove(e.clientX, e.clientY);
-  };
+  const handleMouseMove = useCallback(
+    (e: MouseEvent) => {
+      handleMove(e.clientX, e.clientY);
+    },
+    [handleMove],
+  );
 
-  const handleMouseUp = () => {
+  const handleMouseUp = useCallback(() => {
     handleEnd();
-  };
+  }, [handleEnd]);
 
   const handleTouchStart = (e: React.TouchEvent) => {
     e.preventDefault();
@@ -107,16 +110,22 @@ export function Joystick({
     handleStart(touch.clientX, touch.clientY);
   };
 
-  const handleTouchMove = (e: TouchEvent) => {
-    e.preventDefault();
-    const touch = e.touches[0];
-    handleMove(touch.clientX, touch.clientY);
-  };
+  const handleTouchMove = useCallback(
+    (e: TouchEvent) => {
+      e.preventDefault();
+      const touch = e.touches[0];
+      handleMove(touch.clientX, touch.clientY);
+    },
+    [handleMove],
+  );
 
-  const handleTouchEnd = (e: TouchEvent) => {
-    e.preventDefault();
-    handleEnd();
-  };
+  const handleTouchEnd = useCallback(
+    (e: TouchEvent) => {
+      e.preventDefault();
+      handleEnd();
+    },
+    [handleEnd],
+  );
 
   // Add global event listeners when dragging
   useEffect(() => {
@@ -135,7 +144,13 @@ export function Joystick({
         document.removeEventListener("touchend", handleTouchEnd);
       };
     }
-  }, [isDragging]);
+  }, [
+    isDragging,
+    handleMouseMove,
+    handleMouseUp,
+    handleTouchEnd,
+    handleTouchMove,
+  ]);
 
   return (
     <div
@@ -144,6 +159,10 @@ export function Joystick({
       style={{ width: size, height: size }}
       onMouseDown={handleMouseDown}
       onTouchStart={handleTouchStart}
+      role="slider"
+      aria-label="Joystick control"
+      aria-valuenow={0}
+      tabIndex={0}
     >
       <div className={styles.base}>
         <div
