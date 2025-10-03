@@ -1,1 +1,9 @@
-pnpm run build
+# check the difference between local and remote
+# if there is no difference, skip the build
+# if there is difference, run the build
+git fetch origin main
+if git diff --quiet HEAD origin/main; then
+  echo "No changes detected. Skipping build."
+else
+  pnpm run build
+fi
