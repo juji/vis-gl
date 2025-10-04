@@ -140,10 +140,14 @@ export default function ClusteringPage() {
             type: "Point" as const,
             coordinates: [
               hasDuplicate
-                ? parseFloat(brewery.longitude) + 0.00001
+                ? parseFloat(brewery.longitude) +
+                  (0.00001 + Math.random() * 0.00001) *
+                    (Math.random() < 0.5 ? -1 : 1)
                 : parseFloat(brewery.longitude),
               hasDuplicate
-                ? parseFloat(brewery.latitude) + 0.00001
+                ? parseFloat(brewery.latitude) +
+                  (0.00001 + Math.random() * 0.00001) *
+                    (Math.random() < 0.5 ? -1 : 1)
                 : parseFloat(brewery.latitude),
             ] as [number, number],
           },
