@@ -40,11 +40,13 @@ interface Brewery {
   country: string;
 }
 
-export default function ClusteringPage() {
-  // Default map center coordinates
-  const DEFAULT_CENTER = { lat: 53.32792203675942, lng: -8.101110663924798 };
-  const DEFAULT_ZOOM = 6.75968862915039;
+// Default map center coordinates
+const DEFAULT_CENTER = { lat: 53.32792203675942, lng: -8.101110663924798 };
+const DEFAULT_ZOOM = 6.75968862915039;
+const ZOOM_THRESHOLD = 10; // Stop clustering at zoom level 10 for individual brewery viewing
+const CLUSTER_RADIUS = 85; // Clustering radius in pixels at zoom level 0 (scales with zoom)
 
+export default function ClusteringPage() {
   const [breweries, setBreweries] = useState<Brewery[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -104,13 +106,24 @@ export default function ClusteringPage() {
   // Initialize supercluster
   const supercluster = useMemo(() => {
     const cluster = new SuperCluster({
-      radius: 75,
-      maxZoom: 20,
+      radius: CLUSTER_RADIUS,
+      maxZoom: ZOOM_THRESHOLD,
     });
 
     // Convert breweries to GeoJSON points
     const safeBreweries = Array.isArray(breweries) ? breweries : [];
-    const points: ClusterFeature[] = safeBreweries
+
+    // Deduplicate breweries by coordinates to avoid multiple markers at same location
+    const uniqueBreweries = safeBreweries.filter(
+      (brewery, index, arr) =>
+        arr.findIndex(
+          (b) =>
+            b.latitude === brewery.latitude &&
+            b.longitude === brewery.longitude,
+        ) === index,
+    );
+
+    const points: ClusterFeature[] = uniqueBreweries
       .filter((brewery) => brewery.latitude && brewery.longitude)
       .map((brewery) => ({
         type: "Feature" as const,
@@ -208,10 +221,7 @@ export default function ClusteringPage() {
         {loading ? (
           <p>Loading breweries...</p>
         ) : (
-          <p>
-            Explore breweries with marker clustering. Zoom in to see individual
-            locations.
-          </p>
+          <p>Zoom in to see individual locations.</p>
         )}
         {error && <div className={styles.error}>Error: {error}</div>}
         <div className={styles.stats}>
@@ -315,8 +325,9 @@ export default function ClusteringPage() {
               </a>{" "}
               is a high-performance JavaScript library for clustering geographic
               points on interactive maps. It uses a hierarchical algorithm to
-              group nearby markers into clusters based on zoom level, ensuring
-              smooth performance with large datasets.
+              group nearby markers into clusters based on zoom level, with
+              clustering disabled beyond zoom level 16 for individual brewery
+              viewing.
             </p>
           </div>
 
