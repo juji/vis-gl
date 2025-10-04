@@ -168,8 +168,6 @@ export default function ClusteringPage() {
     return supercluster.getClusters(bounds, Math.round(mapZoom));
   }, [supercluster, mapBounds, mapZoom]);
 
-  console.log("clusters", clusters);
-
   // Fetch breweries based on current map center
   const fetchBreweries = useCallback(async (lat: number, lng: number) => {
     try {
