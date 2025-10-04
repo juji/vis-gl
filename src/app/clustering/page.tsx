@@ -126,7 +126,7 @@ export default function ClusteringPage() {
       .filter((brewery) => brewery.latitude && brewery.longitude)
       .map((brewery, index) => {
         const hasDuplicate =
-          hasDuplicateCoordinates(brewery, safeBreweries) > index;
+          hasDuplicateCoordinates(brewery, safeBreweries) < index;
         return {
           type: "Feature" as const,
           properties: {
