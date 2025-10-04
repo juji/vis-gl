@@ -34,6 +34,7 @@ const Links: MenuItem[] = [
       { href: "/advance-marker", label: "Advance Marker" },
     ],
   },
+  { href: "/clustering", label: "Clustering" },
 ];
 
 function MenuItemComponent({
