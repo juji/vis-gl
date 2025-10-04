@@ -1,11 +1,14 @@
 "use client";
 
 import type { MapCameraChangedEvent } from "@vis.gl/react-google-maps";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import SuperCluster from "supercluster";
-import CustomMarker from "@/components/custom-marker";
 import { SimpleMap } from "@/components/maps/simple";
+import { ClusterMarker } from "./cluster";
 import styles from "./clustering.module.css";
+import { MapControl } from "./map-control";
+import { Marker } from "./marker";
+import { BreweryPopup } from "./popup";
 
 interface ClusterProperties {
   cluster: boolean;
@@ -39,18 +42,56 @@ interface Brewery {
 
 export default function ClusteringPage() {
   // Default map center coordinates
-  const DEFAULT_CENTER = { lat: 1.3521, lng: 103.8198 };
+  const DEFAULT_CENTER = { lat: 53.32792203675942, lng: -8.101110663924798 };
+  const DEFAULT_ZOOM = 6.75968862915039;
 
   const [breweries, setBreweries] = useState<Brewery[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [mapZoom, setMapZoom] = useState(10);
+  const [mapZoom, setMapZoom] = useState(DEFAULT_ZOOM);
   const [mapBounds, setMapBounds] = useState<{
     east: number;
     north: number;
     south: number;
     west: number;
   } | null>(null);
+
+  // Popup state
+  const [activePopup, setActivePopup] = useState<{
+    brewery: Brewery;
+    position: google.maps.LatLngLiteral;
+  } | null>(null);
+
+  // Map control state
+  const [mapControlLat, setMapControlLat] = useState<number | null>(null);
+  const [mapControlLng, setMapControlLng] = useState<number | null>(null);
+  const [mapControlZoom, setMapControlZoom] = useState<number | null>(null);
+
+  // Popup handlers
+  const showPopup = useCallback(
+    (brewery: Brewery, position: google.maps.LatLngLiteral) => {
+      if (activePopup && activePopup.brewery.id === brewery.id) {
+        setActivePopup(null);
+      } else {
+        setActivePopup({ brewery, position });
+      }
+    },
+    [activePopup],
+  );
+
+  const hidePopup = useCallback(() => {
+    setActivePopup(null);
+  }, []);
+
+  // Cluster click handler - zoom to cluster
+  const handleClusterClick = useCallback(
+    (position: google.maps.LatLngLiteral) => {
+      setMapControlLat(position.lat);
+      setMapControlLng(position.lng);
+      setMapControlZoom(Math.min((mapZoom || DEFAULT_ZOOM) + 2, 20));
+    },
+    [mapZoom],
+  );
 
   // Initialize supercluster
   const supercluster = useMemo(() => {
@@ -128,6 +169,8 @@ export default function ClusteringPage() {
       const zoom = event.detail?.zoom;
       const bounds = event.detail?.bounds;
 
+      // console.log('center changed', center, zoom, bounds);
+
       if (center) {
         if (timeoutRef.current) clearTimeout(timeoutRef.current);
         timeoutRef.current = setTimeout(() => {
@@ -154,11 +197,14 @@ export default function ClusteringPage() {
     <div className={styles.container}>
       <div className={styles.header}>
         <h1>Brewery Clustering</h1>
-        <p>
-          Explore breweries with marker clustering. Zoom in to see individual
-          locations.
-        </p>
-        {loading && <div className={styles.loading}>Loading breweries...</div>}
+        {loading ? (
+          <p>Loading breweries...</p>
+        ) : (
+          <p>
+            Explore breweries with marker clustering. Zoom in to see individual
+            locations.
+          </p>
+        )}
         {error && <div className={styles.error}>Error: {error}</div>}
         <div className={styles.stats}>
           <span>
@@ -174,40 +220,72 @@ export default function ClusteringPage() {
           height="600px"
           onCameraChanged={handleCameraChanged}
           defaultCenter={DEFAULT_CENTER}
-          defaultZoom={10}
+          defaultZoom={DEFAULT_ZOOM}
         >
-          {clusters.map((cluster, index: number) => {
+          {clusters.map((cluster, _index: number) => {
             const { cluster: isCluster, point_count: pointCount } =
               cluster.properties;
 
             if (isCluster) {
               return (
-                <CustomMarker
+                <ClusterMarker
                   key={`cluster-${cluster.geometry.coordinates.join(",")}-${pointCount}`}
-                  title={`${pointCount} breweries`}
-                  size={20 + (pointCount || 0) * 2}
-                  color="#ff6b6b"
-                >
-                  <div className={styles.clusterMarker}>{pointCount}</div>
-                </CustomMarker>
+                  count={pointCount || 0}
+                  position={{
+                    lat: cluster.geometry.coordinates[1],
+                    lng: cluster.geometry.coordinates[0],
+                  }}
+                  onClick={() =>
+                    handleClusterClick({
+                      lat: cluster.geometry.coordinates[1],
+                      lng: cluster.geometry.coordinates[0],
+                    })
+                  }
+                />
               );
             }
 
-            return (
-              <CustomMarker
-                key={`brewery-${cluster.properties.breweryId || `temp-${index}`}`}
-                title={cluster.properties.breweryName || "Brewery"}
-                size={32}
-                color="#4ecdc4"
-              >
-                <div className={styles.breweryInfo}>
-                  <strong>{cluster.properties.breweryName}</strong>
-                  <br />
-                  <small>{cluster.properties.breweryType}</small>
-                </div>
-              </CustomMarker>
-            );
+            // Find the brewery data for this individual marker
+            const brewery = Array.isArray(breweries)
+              ? breweries.find((b) => b.id === cluster.properties.breweryId)
+              : null;
+
+            if (brewery) {
+              return (
+                <Marker
+                  key={`brewery-${brewery.id}`}
+                  position={{
+                    lat: cluster.geometry.coordinates[1],
+                    lng: cluster.geometry.coordinates[0],
+                  }}
+                  onClick={() =>
+                    showPopup(brewery, {
+                      lat: cluster.geometry.coordinates[1],
+                      lng: cluster.geometry.coordinates[0],
+                    })
+                  }
+                />
+              );
+            }
+
+            return null;
           })}
+
+          {/* Global popup - only one can be shown at a time */}
+          {activePopup && (
+            <BreweryPopup
+              brewery={activePopup.brewery}
+              position={activePopup.position}
+              onClose={hidePopup}
+            />
+          )}
+
+          {/* Map control for programmatic camera changes */}
+          <MapControl
+            lat={mapControlLat}
+            lng={mapControlLng}
+            zoom={mapControlZoom}
+          />
         </SimpleMap>
       </div>
     </div>

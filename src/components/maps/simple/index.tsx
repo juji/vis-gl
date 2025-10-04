@@ -3,17 +3,13 @@
 import {
   APIProvider,
   Map as GoogleMap,
-  type MapCameraChangedEvent,
   type MapProps,
   RenderingType,
-  useMap,
 } from "@vis.gl/react-google-maps";
-import { useEffect } from "react";
 
 type SimpleMapProps = MapProps & {
   width?: string;
   height?: string;
-  onCameraChanged?: (event: MapCameraChangedEvent) => void;
 };
 
 export function SimpleMap(props: SimpleMapProps) {
@@ -22,7 +18,6 @@ export function SimpleMap(props: SimpleMapProps) {
     height,
     children,
     renderingType = RenderingType.VECTOR,
-    onCameraChanged,
 
     // tangerang, banten, indonesia
     defaultCenter = { lat: -6.178306, lng: 106.631889 },
@@ -46,7 +41,6 @@ export function SimpleMap(props: SimpleMapProps) {
         }}
         gestureHandling="greedy"
         reuseMaps={true}
-        onCameraChanged={onCameraChanged}
       >
         {children}
       </GoogleMap>
