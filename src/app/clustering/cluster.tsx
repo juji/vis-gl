@@ -24,8 +24,8 @@ export function ClusterMarker({
     >
       <div
         style={{
-          width: 20 + count * 2,
-          height: 20 + count * 2,
+          width: 40,
+          height: 40,
           borderRadius: "50%",
           background: "linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%)",
           color: "white",
