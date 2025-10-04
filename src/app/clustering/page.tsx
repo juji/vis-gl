@@ -113,34 +113,42 @@ export default function ClusteringPage() {
     // Convert breweries to GeoJSON points
     const safeBreweries = Array.isArray(breweries) ? breweries : [];
 
-    // Deduplicate breweries by coordinates to avoid multiple markers at same location
-    const uniqueBreweries = safeBreweries.filter(
-      (brewery, index, arr) =>
-        arr.findIndex(
-          (b) =>
-            b.latitude === brewery.latitude &&
-            b.longitude === brewery.longitude,
-        ) === index,
-    );
+    function hasDuplicateCoordinates(brewery: Brewery, arr: Brewery[]) {
+      return arr.findIndex(
+        (b) =>
+          b.latitude === brewery.latitude &&
+          b.longitude === brewery.longitude &&
+          b.id !== brewery.id,
+      );
+    }
 
-    const points: ClusterFeature[] = uniqueBreweries
+    const points: ClusterFeature[] = safeBreweries
       .filter((brewery) => brewery.latitude && brewery.longitude)
-      .map((brewery) => ({
-        type: "Feature" as const,
-        properties: {
-          cluster: false,
-          breweryId: brewery.id,
-          breweryName: brewery.name,
-          breweryType: brewery.brewery_type,
-        },
-        geometry: {
-          type: "Point" as const,
-          coordinates: [
-            parseFloat(brewery.longitude),
-            parseFloat(brewery.latitude),
-          ] as [number, number],
-        },
-      }));
+      .map((brewery, index) => {
+        const hasDuplicate =
+          hasDuplicateCoordinates(brewery, safeBreweries) > index;
+        return {
+          type: "Feature" as const,
+          properties: {
+            cluster: false,
+            breweryId: brewery.id,
+            breweryName: brewery.name,
+            breweryType: brewery.brewery_type,
+            hasDuplicate,
+          },
+          geometry: {
+            type: "Point" as const,
+            coordinates: [
+              hasDuplicate
+                ? parseFloat(brewery.longitude) + 0.00001
+                : parseFloat(brewery.longitude),
+              hasDuplicate
+                ? parseFloat(brewery.latitude) + 0.00001
+                : parseFloat(brewery.latitude),
+            ] as [number, number],
+          },
+        };
+      });
 
     cluster.load(points);
     return cluster;
@@ -159,6 +167,8 @@ export default function ClusteringPage() {
 
     return supercluster.getClusters(bounds, Math.round(mapZoom));
   }, [supercluster, mapBounds, mapZoom]);
+
+  console.log("clusters", clusters);
 
   // Fetch breweries based on current map center
   const fetchBreweries = useCallback(async (lat: number, lng: number) => {
