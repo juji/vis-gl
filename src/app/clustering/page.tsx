@@ -288,6 +288,60 @@ export default function ClusteringPage() {
           />
         </SimpleMap>
       </div>
+
+      {/* Technical Details Section */}
+      <div className={styles.technicalDetails}>
+        <h2>Technical Highlights</h2>
+        <div className={styles.techGrid}>
+          <div className={styles.techSection}>
+            <h3>🎯 SuperCluster</h3>
+            <p>
+              <a
+                href="https://github.com/mapbox/supercluster"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <strong>SuperCluster</strong>
+              </a>{" "}
+              is a high-performance JavaScript library for clustering geographic
+              points on interactive maps. It uses a hierarchical algorithm to
+              group nearby markers into clusters based on zoom level, ensuring
+              smooth performance with large datasets.
+            </p>
+          </div>
+
+          <div className={styles.techSection}>
+            <h3>🍺 Open Brewery DB</h3>
+            <p>
+              <a
+                href="https://www.openbrewerydb.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <strong>Open Brewery DB</strong>
+              </a>{" "}
+              is a free, community-maintained API providing comprehensive
+              brewery data worldwide. This application uses geographic filtering
+              to fetch breweries within map bounds for real-time local
+              discovery.
+            </p>
+          </div>
+
+          <div className={styles.techSection}>
+            <h3>📄 Source Code</h3>
+            <p>
+              <a
+                href="https://github.com/juji/vis-gl/blob/main/src/app/clustering/page.tsx"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                https://github.com/juji/vis-gl/blob/main/src/app/clustering/page.tsx
+              </a>
+              .
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
