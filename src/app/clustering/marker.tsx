@@ -8,21 +8,18 @@ import {
 interface MarkerProps {
   position: google.maps.LatLngLiteral;
   onClick?: () => void;
+  brewery: { id: string };
 }
 
-export function Marker({ position, onClick }: MarkerProps) {
-  function onClickLocal() {
-    console.log("Marker clicked:", position);
-    if (onClick) onClick();
-  }
-
+export function Marker({ position, onClick, brewery }: MarkerProps) {
   return (
     <AdvancedMarker
       position={position}
-      onClick={onClickLocal}
+      onClick={onClick}
       anchorPoint={AdvancedMarkerAnchorPoint.CENTER}
     >
       <div
+        id={`marker-${brewery.id}`}
         style={{
           width: "32px",
           height: "32px",

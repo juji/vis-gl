@@ -4,6 +4,9 @@ import {
   AdvancedMarker,
   AdvancedMarkerAnchorPoint,
 } from "@vis.gl/react-google-maps";
+import { type RefObject, useRef } from "react";
+
+import { useOnClickOutside } from "usehooks-ts";
 
 interface Brewery {
   id: string;
@@ -18,14 +21,25 @@ interface Brewery {
 interface BreweryPopupProps {
   brewery: Brewery | null;
   position: google.maps.LatLngLiteral | null;
+  marker: RefObject<HTMLDivElement | null>;
   onClose: () => void;
 }
 
 export function BreweryPopup({
   brewery,
   position,
+  marker,
   onClose,
 }: BreweryPopupProps) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useOnClickOutside(
+    marker.current
+      ? [marker as RefObject<HTMLDivElement>, ref as RefObject<HTMLDivElement>]
+      : [ref as RefObject<HTMLDivElement>],
+    onClose,
+  );
+
   if (!brewery || !position) return null;
 
   return (
@@ -34,6 +48,7 @@ export function BreweryPopup({
       anchorPoint={AdvancedMarkerAnchorPoint.BOTTOM_CENTER}
     >
       <div
+        ref={ref}
         style={{
           position: "relative",
           transform: "translate(-0%, -21px)",

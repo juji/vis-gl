@@ -1,7 +1,7 @@
 "use client";
 
 import type { MapCameraChangedEvent } from "@vis.gl/react-google-maps";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { type RefObject, useCallback, useMemo, useRef, useState } from "react";
 import SuperCluster from "supercluster";
 import { SimpleMap } from "@/components/maps/simple";
 import { ClusterMarker } from "./cluster";
@@ -60,20 +60,28 @@ export default function ClusteringPage() {
   const [activePopup, setActivePopup] = useState<{
     brewery: Brewery;
     position: google.maps.LatLngLiteral;
+    marker: RefObject<HTMLDivElement | null>;
   } | null>(null);
 
   // Map control state
   const [mapControlLat, setMapControlLat] = useState<number | null>(null);
   const [mapControlLng, setMapControlLng] = useState<number | null>(null);
   const [mapControlZoom, setMapControlZoom] = useState<number | null>(null);
+  const markerRef = useRef<HTMLDivElement>(null);
 
   // Popup handlers
   const showPopup = useCallback(
     (brewery: Brewery, position: google.maps.LatLngLiteral) => {
+      // get ref to marker
+      // to add it to the click outside hook in popup
+      markerRef.current = document.getElementById(
+        `marker-${brewery.id}`,
+      ) as HTMLDivElement;
+
       if (activePopup && activePopup.brewery.id === brewery.id) {
         setActivePopup(null);
       } else {
-        setActivePopup({ brewery, position });
+        setActivePopup({ brewery, position, marker: markerRef });
       }
     },
     [activePopup],
@@ -175,7 +183,7 @@ export default function ClusteringPage() {
         if (timeoutRef.current) clearTimeout(timeoutRef.current);
         timeoutRef.current = setTimeout(() => {
           fetchBreweries(center.lat, center.lng);
-        }, 300); // 300ms debounce
+        }, 500); // 500ms debounce
       }
       if (zoom) {
         setMapZoom(zoom);
@@ -254,6 +262,7 @@ export default function ClusteringPage() {
               return (
                 <Marker
                   key={`brewery-${brewery.id}`}
+                  brewery={brewery}
                   position={{
                     lat: cluster.geometry.coordinates[1],
                     lng: cluster.geometry.coordinates[0],
@@ -276,6 +285,7 @@ export default function ClusteringPage() {
             <BreweryPopup
               brewery={activePopup.brewery}
               position={activePopup.position}
+              marker={activePopup.marker}
               onClose={hidePopup}
             />
           )}
