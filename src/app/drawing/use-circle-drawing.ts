@@ -31,10 +31,34 @@ export function useCircleDrawing() {
     [],
   );
 
+  const startListeners = useCallback(
+    (
+      presentHistoryState: DrawingEntry[],
+      setEntries: (entries: DrawingEntry[]) => void,
+    ) => {
+      if (!map) return;
+
+      map.setOptions({ draggableCursor: "crosshair" });
+      map.addListener("click", (e: google.maps.MapMouseEvent) => {
+        if (!e.latLng) return;
+
+        const newEntries = onClick(e.latLng, presentHistoryState);
+        setEntries(newEntries);
+      });
+
+      return () => {
+        map.setOptions({ draggableCursor: "" });
+        google.maps.event.clearListeners(map, "click");
+      };
+    },
+    [map, onClick],
+  );
+
   const draw = useCallback(
     (
       points: google.maps.LatLng[],
       onChange?: (points: google.maps.LatLng[]) => void,
+      _isLastOfType = false,
     ) => {
       if (!map || points.length < 2) return;
 
@@ -86,6 +110,6 @@ export function useCircleDrawing() {
 
   return {
     draw,
-    onClick,
+    startListeners,
   };
 }

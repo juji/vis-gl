@@ -14,6 +14,16 @@ export function useHistory<T>() {
   const [hasUndo, setHasUndo] = useState(false);
   const [hasRedo, setHasRedo] = useState(false);
 
+  const clean = useCallback(() => {
+    setHistoryState({
+      past: [],
+      present: [],
+      future: [],
+    });
+    setHasUndo(false);
+    setHasRedo(false);
+  }, []);
+
   const undo = useCallback(() => {
     if (historyState.past.length === 0) return;
     const previous = historyState.past[historyState.past.length - 1];
@@ -63,5 +73,6 @@ export function useHistory<T>() {
     hasUndo,
     hasRedo,
     present: historyState.present,
+    clean,
   };
 }
