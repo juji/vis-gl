@@ -13,7 +13,8 @@ import { RectangleButton } from "@/components/icon-buttons/rectangle-button";
 import { RedoButton } from "@/components/icon-buttons/redo-button";
 import { UndoButton } from "@/components/icon-buttons/undo-button";
 import styles from "./drawing.module.css";
-import { type DrawingTool, useDrawController } from "./use-draw-controller";
+import type { DrawingTool } from "./types";
+import { useDrawController } from "./use-draw-controller";
 
 export function DrawingMap() {
   const [activeTool, setActiveTool] = useState<DrawingTool>(null);
