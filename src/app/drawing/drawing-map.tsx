@@ -18,7 +18,7 @@ import styles from "./drawing.module.css";
 export function DrawingMap() {
   const [activeTool, setActiveTool] = useState<DrawingTool>(null);
 
-  const { undo, redo } = useDrawController(activeTool);
+  const { undo, redo, hasUndo, hasRedo } = useDrawController(activeTool);
 
   const handleToolSelect = (tool: DrawingTool) => {
     setActiveTool(activeTool === tool ? null : tool);
@@ -61,8 +61,18 @@ export function DrawingMap() {
             onClick={() => handleToolSelect("rectangle")}
             title="Draw Rectangle"
           />
-          <UndoButton size={40} onClick={undo} title="Undo" />
-          <RedoButton size={40} onClick={redo} title="Redo" />
+          <UndoButton
+            disabled={!hasUndo}
+            size={40}
+            onClick={undo}
+            title="Undo"
+          />
+          <RedoButton
+            disabled={!hasRedo}
+            size={40}
+            onClick={redo}
+            title="Redo"
+          />
         </div>
       </MapControl>
     </GoogleMap>

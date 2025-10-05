@@ -1,7 +1,7 @@
 "use client";
 
 import { APIProvider } from "@vis.gl/react-google-maps";
-import { DrawingMap } from "./map";
+import { DrawingMap } from "./drawing-map";
 
 export function Drawing() {
   return (
