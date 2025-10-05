@@ -1,8 +1,11 @@
 import { useMap } from "@vis.gl/react-google-maps";
 import { useEffect, useRef, useState } from "react";
 import type { DrawingEntry, DrawingTool } from "./types";
+import { useCircleDrawing } from "./use-circle-drawing";
 import { useHistory } from "./use-history";
+import { useLineDrawing } from "./use-line-drawing";
 import { usePolygonDrawing } from "./use-polygon-drawing";
+import { useRectangleDrawing } from "./use-rectangle-drawing";
 
 export function useDrawController(drawingTool: DrawingTool) {
   const map = useMap();
@@ -27,6 +30,10 @@ export function useDrawController(drawingTool: DrawingTool) {
   >([]);
 
   const { draw: drawPolygon, onClick: onPolygonClick } = usePolygonDrawing();
+  const { draw: drawLine, onClick: onLineClick } = useLineDrawing();
+  const { draw: drawCircle, onClick: onCircleClick } = useCircleDrawing();
+  const { draw: drawRectangle, onClick: onRectangleClick } =
+    useRectangleDrawing();
 
   // Save to history
   // biome-ignore lint/correctness/useExhaustiveDependencies: will loop on every change
@@ -48,24 +55,31 @@ export function useDrawController(drawingTool: DrawingTool) {
     objects.current = [];
 
     presentHistoryState.forEach((entry) => {
+      const updateEntry = (newPoints: google.maps.LatLng[]) => {
+        const newEntries = presentHistoryState.map((e) => {
+          if (e === entry) {
+            return { ...e, points: newPoints };
+          }
+          return e;
+        });
+        setEntries(newEntries);
+      };
+
       if (entry.type === "polygon") {
-        const polygon = drawPolygon(
-          entry.points,
-          (newPoints: google.maps.LatLng[]) => {
-            const newEntries = presentHistoryState.map((e) => {
-              if (e === entry) {
-                return { ...e, points: newPoints };
-              }
-              return e;
-            });
-            setEntries(newEntries);
-          },
-        );
+        const polygon = drawPolygon(entry.points, updateEntry);
         polygon && objects.current.push(polygon);
+      } else if (entry.type === "line") {
+        const line = drawLine(entry.points, updateEntry);
+        line && objects.current.push(line);
+      } else if (entry.type === "circle") {
+        const circle = drawCircle(entry.points, updateEntry);
+        circle && objects.current.push(circle);
+      } else if (entry.type === "rectangle") {
+        const rectangle = drawRectangle(entry.points, updateEntry);
+        rectangle && objects.current.push(rectangle);
       }
-      // Implement other shapes (line, circle, rectangle) similarly
     });
-  }, [presentHistoryState, drawPolygon]);
+  }, [presentHistoryState, drawPolygon, drawLine, drawCircle, drawRectangle]);
 
   useEffect(() => {
     if (!map) return;
@@ -83,6 +97,18 @@ export function useDrawController(drawingTool: DrawingTool) {
         const newEntries = onPolygonClick(e.latLng, entries);
         console.log("Polygon drawing entries:", newEntries);
         newEntries && setEntries([...newEntries]);
+      } else if (drawingTool === "line") {
+        const newEntries = onLineClick(e.latLng, entries);
+        console.log("Line drawing entries:", newEntries);
+        newEntries && setEntries([...newEntries]);
+      } else if (drawingTool === "circle") {
+        const newEntries = onCircleClick(e.latLng, entries);
+        console.log("Circle drawing entries:", newEntries);
+        newEntries && setEntries([...newEntries]);
+      } else if (drawingTool === "rectangle") {
+        const newEntries = onRectangleClick(e.latLng, entries);
+        console.log("Rectangle drawing entries:", newEntries);
+        newEntries && setEntries([...newEntries]);
       }
     });
 
@@ -90,7 +116,15 @@ export function useDrawController(drawingTool: DrawingTool) {
       map.setOptions({ draggableCursor: "" });
       google.maps.event.clearListeners(map, "click");
     };
-  }, [map, drawingTool, entries, onPolygonClick]);
+  }, [
+    map,
+    drawingTool,
+    entries,
+    onPolygonClick,
+    onLineClick,
+    onCircleClick,
+    onRectangleClick,
+  ]);
 
   // This hook can be expanded to manage drawing state if needed
   return {
