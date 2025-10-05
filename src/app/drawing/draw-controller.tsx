@@ -1,31 +1,30 @@
-import { useCallback, useEffect } from "react";
 import { useMap } from "@vis.gl/react-google-maps";
+import { useCallback, useEffect } from "react";
 
 export type DrawingTool = "polygon" | "line" | "circle" | "rectangle" | null;
 
-export function useDrawController( drawingTool: DrawingTool ) {
-
+export function useDrawController(drawingTool: DrawingTool) {
   const map = useMap();
 
   const initializePolygonDrawing = useCallback(() => {
     if (!map) return;
-    map.setOptions({ draggableCursor:'crosshair' });
-  }, [ map ]);
+    map.setOptions({ draggableCursor: "crosshair" });
+  }, [map]);
 
   const initializeLineDrawing = useCallback(() => {
     if (!map) return;
-    map.setOptions({ draggableCursor:'crosshair' });
-  }, [ map ]);
+    map.setOptions({ draggableCursor: "crosshair" });
+  }, [map]);
 
   const initializeCircleDrawing = useCallback(() => {
     if (!map) return;
-    map.setOptions({ draggableCursor:'crosshair' });
-  }, [ map ]);
-  
+    map.setOptions({ draggableCursor: "crosshair" });
+  }, [map]);
+
   const initializeRectangleDrawing = useCallback(() => {
     if (!map) return;
-    map.setOptions({ draggableCursor:'crosshair' });
-  }, [ map ]);
+    map.setOptions({ draggableCursor: "crosshair" });
+  }, [map]);
 
   useEffect(() => {
     if (!map) return;
@@ -46,14 +45,14 @@ export function useDrawController( drawingTool: DrawingTool ) {
       default:
         break;
     }
-
-  },[
-    map, drawingTool,
-    initializePolygonDrawing, 
-    initializeLineDrawing, 
-    initializeCircleDrawing, 
-    initializeRectangleDrawing
-  ])
+  }, [
+    map,
+    drawingTool,
+    initializePolygonDrawing,
+    initializeLineDrawing,
+    initializeCircleDrawing,
+    initializeRectangleDrawing,
+  ]);
 
   const undo = useCallback(() => {
     if (!map) return;
@@ -69,6 +68,6 @@ export function useDrawController( drawingTool: DrawingTool ) {
   return {
     undo,
     redo,
-    drawingTool
+    drawingTool,
   };
 }

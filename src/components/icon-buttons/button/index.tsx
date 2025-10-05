@@ -31,7 +31,7 @@ export function Button({
         style={{
           width: `${size}px`,
           height: `${size}px`,
-          outline: noOutline ? 'none' : undefined,
+          outline: noOutline ? "none" : undefined,
         }}
         onClick={onClick}
         disabled={disabled}

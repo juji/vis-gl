@@ -1,15 +1,12 @@
 "use client";
 
-import {
-  APIProvider
-} from "@vis.gl/react-google-maps";
-import { Map } from "./map";
+import { APIProvider } from "@vis.gl/react-google-maps";
+import { DrawingMap } from "./map";
 
 export function Drawing() {
-
   return (
     <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ""}>
-      <Map />
+      <DrawingMap />
     </APIProvider>
   );
 }

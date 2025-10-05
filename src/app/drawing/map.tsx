@@ -1,5 +1,10 @@
-'use client';
+"use client";
 
+import {
+  ControlPosition,
+  Map as GoogleMap,
+  MapControl,
+} from "@vis.gl/react-google-maps";
 import { useState } from "react";
 import { CircleButton } from "@/components/icon-buttons/circle-button";
 import { LineButton } from "@/components/icon-buttons/line-button";
@@ -7,32 +12,22 @@ import { PolygonButton } from "@/components/icon-buttons/polygon-button";
 import { RectangleButton } from "@/components/icon-buttons/rectangle-button";
 import { RedoButton } from "@/components/icon-buttons/redo-button";
 import { UndoButton } from "@/components/icon-buttons/undo-button";
+import { type DrawingTool, useDrawController } from "./draw-controller";
 import styles from "./drawing.module.css";
-import { useDrawController, type DrawingTool } from "./draw-controller";
 
-import { 
-  ControlPosition, 
-  MapControl,
-  Map as GoogleMap, 
-} from "@vis.gl/react-google-maps";
-
-
-export function Map(){
-
+export function DrawingMap() {
   const [activeTool, setActiveTool] = useState<DrawingTool>(null);
 
-  const {
-    undo, redo
-  } = useDrawController(activeTool);
-  
+  const { undo, redo } = useDrawController(activeTool);
+
   const handleToolSelect = (tool: DrawingTool) => {
     setActiveTool(activeTool === tool ? null : tool);
   };
 
-  return (<>
+  return (
     <GoogleMap
       style={{
-        height: '500px'
+        height: "500px",
       }}
       disableDefaultUI={true}
       defaultCenter={{ lat: -6.178306, lng: 106.631889 }}
@@ -66,18 +61,10 @@ export function Map(){
             onClick={() => handleToolSelect("rectangle")}
             title="Draw Rectangle"
           />
-          <UndoButton
-            size={40}
-            onClick={undo}
-            title="Undo"
-          />
-          <RedoButton
-            size={40}
-            onClick={redo}
-            title="Redo"
-          />
+          <UndoButton size={40} onClick={undo} title="Undo" />
+          <RedoButton size={40} onClick={redo} title="Redo" />
         </div>
       </MapControl>
     </GoogleMap>
-  </>);
+  );
 }

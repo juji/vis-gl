@@ -93,7 +93,7 @@
 
 /* No outline variant */
 .noOutline {
-  outline: none !important;
+  outline: none;
 }
 
 .noOutline:active {
