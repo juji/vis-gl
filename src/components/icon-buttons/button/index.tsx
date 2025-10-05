@@ -11,6 +11,7 @@ interface ButtonProps {
   children: ReactNode; // The icon content
   className?: string;
   title?: string;
+  noOutline?: boolean;
 }
 
 export function Button({
@@ -21,14 +22,16 @@ export function Button({
   children,
   className = "",
   title,
+  noOutline = false,
 }: ButtonProps) {
   return (
     <div className={styles.buttonContainer}>
       <button
-        className={`${styles.button} ${active ? styles.active : ""} ${className}`}
+        className={`${styles.button} ${active ? styles.active : ""} ${noOutline ? styles.noOutline : ""} ${className}`}
         style={{
           width: `${size}px`,
           height: `${size}px`,
+          outline: noOutline ? 'none' : undefined,
         }}
         onClick={onClick}
         disabled={disabled}

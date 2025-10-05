@@ -8,6 +8,7 @@ interface UndoButtonProps {
   size?: number;
   disabled?: boolean;
   title?: string;
+  noOutline?: boolean;
 }
 
 export function UndoButton({
@@ -16,6 +17,7 @@ export function UndoButton({
   size = 48,
   disabled = false,
   title,
+  noOutline = true,
 }: UndoButtonProps) {
   return (
     <Button
@@ -24,6 +26,7 @@ export function UndoButton({
       size={size}
       disabled={disabled}
       title={title}
+      noOutline={noOutline}
     >
       <svg
         viewBox="0 0 24 24"

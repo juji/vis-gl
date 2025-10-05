@@ -91,6 +91,15 @@
   opacity: 1;
 }
 
+/* No outline variant */
+.noOutline {
+  outline: none !important;
+}
+
+.noOutline:active {
+  opacity: 0.6;
+}
+
 .tooltip::after {
   content: "";
   position: absolute;

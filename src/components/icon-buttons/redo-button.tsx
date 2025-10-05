@@ -8,6 +8,7 @@ interface RedoButtonProps {
   size?: number;
   disabled?: boolean;
   title?: string;
+  noOutline?: boolean;
 }
 
 export function RedoButton({
@@ -16,6 +17,7 @@ export function RedoButton({
   size = 48,
   disabled = false,
   title,
+  noOutline = true,
 }: RedoButtonProps) {
   return (
     <Button
@@ -24,6 +26,7 @@ export function RedoButton({
       size={size}
       disabled={disabled}
       title={title}
+      noOutline={noOutline}
     >
       <svg
         viewBox="0 0 24 24"

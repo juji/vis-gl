@@ -3,30 +3,29 @@ import { useMap } from "@vis.gl/react-google-maps";
 
 export type DrawingTool = "polygon" | "line" | "circle" | "rectangle" | null;
 
-export function DrawController({
-  drawingTool,
-}:{
-  drawingTool: DrawingTool,
-}) {
+export function useDrawController( drawingTool: DrawingTool ) {
 
   const map = useMap();
 
   const initializePolygonDrawing = useCallback(() => {
     if (!map) return;
     map.setOptions({ draggableCursor:'crosshair' });
-  }, [map]);
+  }, [ map ]);
 
   const initializeLineDrawing = useCallback(() => {
     if (!map) return;
-  }, [map]);
+    map.setOptions({ draggableCursor:'crosshair' });
+  }, [ map ]);
 
   const initializeCircleDrawing = useCallback(() => {
     if (!map) return;
-  }, [map]);
+    map.setOptions({ draggableCursor:'crosshair' });
+  }, [ map ]);
   
   const initializeRectangleDrawing = useCallback(() => {
     if (!map) return;
-  }, [map]);
+    map.setOptions({ draggableCursor:'crosshair' });
+  }, [ map ]);
 
   useEffect(() => {
     if (!map) return;
@@ -48,8 +47,28 @@ export function DrawController({
         break;
     }
 
-  },[drawingTool, map])
+  },[
+    map, drawingTool,
+    initializePolygonDrawing, 
+    initializeLineDrawing, 
+    initializeCircleDrawing, 
+    initializeRectangleDrawing
+  ])
 
-  return null;
-  
+  const undo = useCallback(() => {
+    if (!map) return;
+    console.log("Undo action");
+  }, [map]);
+
+  const redo = useCallback(() => {
+    if (!map) return;
+    console.log("Redo action");
+  }, [map]);
+
+  // This hook can be expanded to manage drawing state if needed
+  return {
+    undo,
+    redo,
+    drawingTool
+  };
 }
