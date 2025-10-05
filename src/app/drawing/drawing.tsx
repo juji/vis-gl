@@ -6,10 +6,11 @@ import { CircleButton } from "@/components/icon-buttons/circle-button";
 import { LineButton } from "@/components/icon-buttons/line-button";
 import { PolygonButton } from "@/components/icon-buttons/polygon-button";
 import { RectangleButton } from "@/components/icon-buttons/rectangle-button";
+import { RedoButton } from "@/components/icon-buttons/redo-button";
+import { UndoButton } from "@/components/icon-buttons/undo-button";
 import { SimpleMap } from "@/components/maps/simple";
 import styles from "./drawing.module.css";
-
-type DrawingTool = "polygon" | "line" | "circle" | "rectangle" | null;
+import { DrawController, type DrawingTool } from "./draw-controller";
 
 export function Drawing() {
   const [activeTool, setActiveTool] = useState<DrawingTool>(null);
@@ -21,6 +22,7 @@ export function Drawing() {
   return (
     <>
       <SimpleMap height="500px">
+        <DrawController drawingTool={activeTool} />
         <MapControl position={ControlPosition.TOP_RIGHT}>
           <div className={styles.drawingToolbar}>
             <PolygonButton
@@ -46,6 +48,16 @@ export function Drawing() {
               active={activeTool === "rectangle"}
               onClick={() => handleToolSelect("rectangle")}
               title="Draw Rectangle"
+            />
+            <UndoButton
+              size={40}
+              onClick={() => console.log("Undo")}
+              title="Undo"
+            />
+            <RedoButton
+              size={40}
+              onClick={() => console.log("Redo")}
+              title="Redo"
             />
           </div>
         </MapControl>
