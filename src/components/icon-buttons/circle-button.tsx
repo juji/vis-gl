@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "./styles.module.css";
+import { Button } from "./button";
 
 interface CircleButtonProps {
   onClick?: () => void;
@@ -9,28 +9,23 @@ interface CircleButtonProps {
   disabled?: boolean;
 }
 
-export default function CircleButton({
+export function CircleButton({
   onClick,
   active = false,
   size = 48,
   disabled = false,
 }: CircleButtonProps) {
   return (
-    <button
-      className={`${styles.circleButton} ${active ? styles.active : ""}`}
-      style={{
-        width: `${size}px`,
-        height: `${size}px`,
-      }}
-      onClick={onClick}
-      disabled={disabled}
-      type="button"
-    >
+    <Button onClick={onClick} active={active} size={size} disabled={disabled}>
       <svg
         viewBox="0 0 24 24"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className={styles.circleIcon}
+        style={{
+          width: "60%",
+          height: "60%",
+          transition: "transform 0.2s ease",
+        }}
         aria-label="Circle tool"
       >
         <title>Circle tool</title>
@@ -44,6 +39,6 @@ export default function CircleButton({
         />
         <circle cx="12" cy="12" r="3" fill="currentColor" opacity="0.6" />
       </svg>
-    </button>
+    </Button>
   );
 }

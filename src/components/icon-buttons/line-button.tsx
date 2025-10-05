@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "./styles.module.css";
+import { Button } from "./button";
 
 interface LineButtonProps {
   onClick?: () => void;
@@ -9,28 +9,23 @@ interface LineButtonProps {
   disabled?: boolean;
 }
 
-export default function LineButton({
+export function LineButton({
   onClick,
   active = false,
   size = 48,
   disabled = false,
 }: LineButtonProps) {
   return (
-    <button
-      className={`${styles.lineButton} ${active ? styles.active : ""}`}
-      style={{
-        width: `${size}px`,
-        height: `${size}px`,
-      }}
-      onClick={onClick}
-      disabled={disabled}
-      type="button"
-    >
+    <Button onClick={onClick} active={active} size={size} disabled={disabled}>
       <svg
         viewBox="0 0 24 24"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className={styles.lineIcon}
+        style={{
+          width: "60%",
+          height: "60%",
+          transition: "transform 0.2s ease",
+        }}
         aria-label="Line tool"
       >
         <title>Line tool</title>
@@ -43,6 +38,6 @@ export default function LineButton({
         <circle cx="4" cy="12" r="2" fill="currentColor" />
         <circle cx="20" cy="12" r="2" fill="currentColor" />
       </svg>
-    </button>
+    </Button>
   );
 }

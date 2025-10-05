@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "./styles.module.css";
+import { Button } from "./button";
 
 interface PolygonButtonProps {
   onClick?: () => void;
@@ -9,28 +9,23 @@ interface PolygonButtonProps {
   disabled?: boolean;
 }
 
-export default function PolygonButton({
+export function PolygonButton({
   onClick,
   active = false,
   size = 48,
   disabled = false,
 }: PolygonButtonProps) {
   return (
-    <button
-      className={`${styles.polygonButton} ${active ? styles.active : ""}`}
-      style={{
-        width: `${size}px`,
-        height: `${size}px`,
-      }}
-      onClick={onClick}
-      disabled={disabled}
-      type="button"
-    >
+    <Button onClick={onClick} active={active} size={size} disabled={disabled}>
       <svg
         viewBox="0 0 24 24"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className={styles.polygonIcon}
+        style={{
+          width: "60%",
+          height: "60%",
+          transition: "transform 0.2s ease",
+        }}
         aria-label="Polygon tool"
       >
         <title>Polygon tool</title>
@@ -40,7 +35,6 @@ export default function PolygonButton({
           strokeWidth="2"
           strokeLinejoin="round"
         />
-        {/* Inner geometric pattern */}
         <path
           d="M12 6L16 8.5V13.5L12 16L8 13.5V8.5L12 6Z"
           stroke="currentColor"
@@ -49,6 +43,6 @@ export default function PolygonButton({
           opacity="0.6"
         />
       </svg>
-    </button>
+    </Button>
   );
 }

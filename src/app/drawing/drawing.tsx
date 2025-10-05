@@ -2,10 +2,10 @@
 
 import { ControlPosition, MapControl } from "@vis.gl/react-google-maps";
 import { useState } from "react";
-import CircleButton from "@/components/icons/circle-button";
-import LineButton from "@/components/icons/line-button";
-import PolygonButton from "@/components/icons/polygon-button";
-import RectangleButton from "@/components/icons/rectangle-button";
+import { CircleButton } from "@/components/icon-buttons/circle-button";
+import { LineButton } from "@/components/icon-buttons/line-button";
+import { PolygonButton } from "@/components/icon-buttons/polygon-button";
+import { RectangleButton } from "@/components/icon-buttons/rectangle-button";
 import { SimpleMap } from "@/components/maps/simple";
 import styles from "./drawing.module.css";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "./styles.module.css";
+import { Button } from "./button";
 
 interface RectangleButtonProps {
   onClick?: () => void;
@@ -9,28 +9,23 @@ interface RectangleButtonProps {
   disabled?: boolean;
 }
 
-export default function RectangleButton({
+export function RectangleButton({
   onClick,
   active = false,
   size = 48,
   disabled = false,
 }: RectangleButtonProps) {
   return (
-    <button
-      className={`${styles.rectangleButton} ${active ? styles.active : ""}`}
-      style={{
-        width: `${size}px`,
-        height: `${size}px`,
-      }}
-      onClick={onClick}
-      disabled={disabled}
-      type="button"
-    >
+    <Button onClick={onClick} active={active} size={size} disabled={disabled}>
       <svg
         viewBox="0 0 24 24"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className={styles.rectangleIcon}
+        style={{
+          width: "60%",
+          height: "60%",
+          transition: "transform 0.2s ease",
+        }}
         aria-label="Rectangle tool"
       >
         <title>Rectangle tool</title>
@@ -54,6 +49,6 @@ export default function RectangleButton({
           opacity="0.6"
         />
       </svg>
-    </button>
+    </Button>
   );
 }
