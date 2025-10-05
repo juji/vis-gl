@@ -1,0 +1,18 @@
+/* Drawing Toolbar Styles */
+.drawingToolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: transparent;
+  border-radius: 12px;
+  padding: 12px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .drawingToolbar {
+    flex-direction: row;
+    padding: 8px;
+    gap: 6px;
+  }
+}
