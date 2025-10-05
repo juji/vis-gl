@@ -33,6 +33,17 @@
   outline-offset: 2px;
 }
 
+/* Active state styling */
+.active {
+  background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+  box-shadow: 0 4px 12px rgba(74, 222, 128, 0.4);
+}
+
+.active:hover:not(:disabled) {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  box-shadow: 0 6px 20px rgba(74, 222, 128, 0.5);
+}
+
 /* Icon styling */
 .polygonIcon {
   width: 60%;

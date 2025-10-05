@@ -4,20 +4,20 @@ import styles from "./styles.module.css";
 
 interface PolygonButtonProps {
   onClick?: () => void;
-  className?: string;
+  active?: boolean;
   size?: number;
   disabled?: boolean;
 }
 
 export default function PolygonButton({
   onClick,
-  className = "",
+  active = false,
   size = 48,
   disabled = false,
 }: PolygonButtonProps) {
   return (
     <button
-      className={`${styles.polygonButton} ${className}`}
+      className={`${styles.polygonButton} ${active ? styles.active : ""}`}
       style={{
         width: `${size}px`,
         height: `${size}px`,
