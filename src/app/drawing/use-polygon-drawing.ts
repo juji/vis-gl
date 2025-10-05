@@ -43,6 +43,8 @@ export function usePolygonDrawing() {
     ) => {
       if (!map) return;
 
+      const listeners: google.maps.MapsEventListener[] = [];
+
       const isClosedPolygon =
         points.length > 2 && points[0].equals(points[points.length - 1]);
       if (isClosedPolygon) {
@@ -64,11 +66,27 @@ export function usePolygonDrawing() {
             points[points.length - 1],
           ]);
         }
-        google.maps.event.addListener(polygon, "dragend", getPaths);
-        google.maps.event.addListener(polygon.getPath(), "insert_at", getPaths);
-        google.maps.event.addListener(polygon.getPath(), "remove_at", getPaths);
-        google.maps.event.addListener(polygon.getPath(), "set_at", getPaths);
-        return polygon;
+        listeners.push(
+          google.maps.event.addListener(polygon, "dragend", getPaths),
+        );
+        listeners.push(
+          google.maps.event.addListener(
+            polygon.getPath(),
+            "insert_at",
+            getPaths,
+          ),
+        );
+        listeners.push(
+          google.maps.event.addListener(
+            polygon.getPath(),
+            "remove_at",
+            getPaths,
+          ),
+        );
+        listeners.push(
+          google.maps.event.addListener(polygon.getPath(), "set_at", getPaths),
+        );
+        return { shape: polygon, listeners };
       } else {
         const polyline = new google.maps.Polyline({
           path: points,
@@ -79,36 +97,48 @@ export function usePolygonDrawing() {
           editable: true,
         });
         polyline.setMap(map);
-        polyline.addListener("click", (e: google.maps.MapMouseEvent) => {
-          if (e.latLng) {
-            // check if first point is clicked
-            // if so, close the polygon
-            const firstPoint = polyline.getPath().getAt(0);
-            if (firstPoint?.equals(e.latLng)) {
-              onChange?.([
-                ...polyline.getPath().getArray(),
-                polyline.getPath().getAt(0),
-              ]);
+        const clickListener = polyline.addListener(
+          "click",
+          (e: google.maps.MapMouseEvent) => {
+            if (e.latLng) {
+              // check if first point is clicked
+              // if so, close the polygon
+              const firstPoint = polyline.getPath().getAt(0);
+              if (firstPoint?.equals(e.latLng)) {
+                onChange?.([
+                  ...polyline.getPath().getArray(),
+                  polyline.getPath().getAt(0),
+                ]);
+              }
             }
-          }
-        });
+          },
+        );
+        listeners.push(clickListener);
 
         function getPaths() {
           onChange?.(polyline.getPath().getArray());
         }
-        google.maps.event.addListener(polyline, "dragend", getPaths);
-        google.maps.event.addListener(
-          polyline.getPath(),
-          "insert_at",
-          getPaths,
+        listeners.push(
+          google.maps.event.addListener(polyline, "dragend", getPaths),
         );
-        google.maps.event.addListener(
-          polyline.getPath(),
-          "remove_at",
-          getPaths,
+        listeners.push(
+          google.maps.event.addListener(
+            polyline.getPath(),
+            "insert_at",
+            getPaths,
+          ),
         );
-        google.maps.event.addListener(polyline.getPath(), "set_at", getPaths);
-        return polyline;
+        listeners.push(
+          google.maps.event.addListener(
+            polyline.getPath(),
+            "remove_at",
+            getPaths,
+          ),
+        );
+        listeners.push(
+          google.maps.event.addListener(polyline.getPath(), "set_at", getPaths),
+        );
+        return { shape: polyline, listeners };
       }
     },
     [map],

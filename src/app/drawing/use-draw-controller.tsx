@@ -28,6 +28,7 @@ export function useDrawController(drawingTool: DrawingTool) {
       | google.maps.Rectangle
     )[]
   >([]);
+  const listeners = useRef<google.maps.MapsEventListener[]>([]);
 
   const { draw: drawPolygon, onClick: onPolygonClick } = usePolygonDrawing();
   const { draw: drawLine, onClick: onLineClick } = useLineDrawing();
@@ -68,17 +69,29 @@ export function useDrawController(drawingTool: DrawingTool) {
       };
 
       if (entry.type === "polygon") {
-        const polygon = drawPolygon(entry.points, updateEntry);
-        polygon && objects.current.push(polygon);
+        const result = drawPolygon(entry.points, updateEntry);
+        if (result) {
+          objects.current.push(result.shape);
+          listeners.current.push(...result.listeners);
+        }
       } else if (entry.type === "line") {
-        const line = drawLine(entry.points, updateEntry);
-        line && objects.current.push(line);
+        const result = drawLine(entry.points, updateEntry);
+        if (result) {
+          objects.current.push(result.shape);
+          listeners.current.push(...result.listeners);
+        }
       } else if (entry.type === "circle") {
-        const circle = drawCircle(entry.points, updateEntry);
-        circle && objects.current.push(circle);
+        const result = drawCircle(entry.points, updateEntry);
+        if (result) {
+          objects.current.push(result.shape);
+          listeners.current.push(...result.listeners);
+        }
       } else if (entry.type === "rectangle") {
-        const rectangle = drawRectangle(entry.points, updateEntry);
-        rectangle && objects.current.push(rectangle);
+        const result = drawRectangle(entry.points, updateEntry);
+        if (result) {
+          objects.current.push(result.shape);
+          listeners.current.push(...result.listeners);
+        }
       }
     });
   }, [presentHistoryState, drawPolygon, drawLine, drawCircle, drawRectangle]);
@@ -127,6 +140,22 @@ export function useDrawController(drawingTool: DrawingTool) {
     onCircleClick,
     onRectangleClick,
   ]);
+
+  // Cleanup effect to remove all listeners and objects on unmount
+  useEffect(() => {
+    return () => {
+      // Clear objects
+      objects.current.forEach((obj) => {
+        obj.setMap(null);
+      });
+      // Clear listeners
+      listeners.current.forEach((listener) => {
+        google.maps.event.removeListener(listener);
+      });
+      objects.current = [];
+      listeners.current = [];
+    };
+  }, []);
 
   // This hook can be expanded to manage drawing state if needed
   return {

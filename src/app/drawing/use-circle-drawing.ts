@@ -58,6 +58,8 @@ export function useCircleDrawing() {
       });
       circle.setMap(map);
 
+      const listeners: google.maps.MapsEventListener[] = [];
+
       function updatePoints() {
         const newCenter = circle.getCenter();
         const newRadius = circle.getRadius();
@@ -70,9 +72,14 @@ export function useCircleDrawing() {
           onChange?.([newCenter, newRadiusPoint]);
         }
       }
-      google.maps.event.addListener(circle, "center_changed", updatePoints);
-      google.maps.event.addListener(circle, "radius_changed", updatePoints);
-      return circle;
+      listeners.push(
+        google.maps.event.addListener(circle, "center_changed", updatePoints),
+      );
+      listeners.push(
+        google.maps.event.addListener(circle, "radius_changed", updatePoints),
+      );
+
+      return { shape: circle, listeners };
     },
     [map],
   );

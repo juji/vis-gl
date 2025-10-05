@@ -54,6 +54,8 @@ export function useRectangleDrawing() {
       });
       rectangle.setMap(map);
 
+      const listeners: google.maps.MapsEventListener[] = [];
+
       function updatePoints() {
         const newBounds = rectangle.getBounds();
         if (newBounds) {
@@ -62,8 +64,14 @@ export function useRectangleDrawing() {
           onChange?.([sw, ne]);
         }
       }
-      google.maps.event.addListener(rectangle, "bounds_changed", updatePoints);
-      return rectangle;
+      listeners.push(
+        google.maps.event.addListener(
+          rectangle,
+          "bounds_changed",
+          updatePoints,
+        ),
+      );
+      return { shape: rectangle, listeners };
     },
     [map],
   );

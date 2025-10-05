@@ -48,14 +48,32 @@ export function useLineDrawing() {
       });
       polyline.setMap(map);
 
+      const listeners: google.maps.MapsEventListener[] = [];
+
       function getPaths() {
         onChange?.(polyline.getPath().getArray());
       }
-      google.maps.event.addListener(polyline, "dragend", getPaths);
-      google.maps.event.addListener(polyline.getPath(), "insert_at", getPaths);
-      google.maps.event.addListener(polyline.getPath(), "remove_at", getPaths);
-      google.maps.event.addListener(polyline.getPath(), "set_at", getPaths);
-      return polyline;
+      listeners.push(
+        google.maps.event.addListener(polyline, "dragend", getPaths),
+      );
+      listeners.push(
+        google.maps.event.addListener(
+          polyline.getPath(),
+          "insert_at",
+          getPaths,
+        ),
+      );
+      listeners.push(
+        google.maps.event.addListener(
+          polyline.getPath(),
+          "remove_at",
+          getPaths,
+        ),
+      );
+      listeners.push(
+        google.maps.event.addListener(polyline.getPath(), "set_at", getPaths),
+      );
+      return { shape: polyline, listeners };
     },
     [map],
   );
