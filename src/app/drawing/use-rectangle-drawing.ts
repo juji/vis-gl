@@ -10,20 +10,23 @@ export function useRectangleDrawing() {
       const lastEntry = entries[entries.length - 1];
       if (!lastEntry || lastEntry.type !== "rectangle") {
         const newEntry: DrawingEntry = { type: "rectangle", points: [latLng] };
-        entries.push(newEntry);
-        return entries;
+        return [...entries, newEntry];
       }
 
       // Rectangle needs exactly 2 points (opposite corners)
       if (lastEntry.points.length >= 2) {
         const newEntry: DrawingEntry = { type: "rectangle", points: [latLng] };
-        entries.push(newEntry);
-        return entries;
+        return [...entries, newEntry];
       }
 
       // add the opposite corner
-      entries[entries.length - 1].points.push(latLng);
-      return entries;
+      return [
+        ...entries.slice(0, -1),
+        {
+          ...entries[entries.length - 1],
+          points: [...entries[entries.length - 1].points, latLng],
+        },
+      ];
     },
     [],
   );

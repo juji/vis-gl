@@ -10,20 +10,23 @@ export function useCircleDrawing() {
       const lastEntry = entries[entries.length - 1];
       if (!lastEntry || lastEntry.type !== "circle") {
         const newEntry: DrawingEntry = { type: "circle", points: [latLng] };
-        entries.push(newEntry);
-        return entries;
+        return [...entries, newEntry];
       }
 
       // Circle needs exactly 2 points (center and radius point)
       if (lastEntry.points.length >= 2) {
         const newEntry: DrawingEntry = { type: "circle", points: [latLng] };
-        entries.push(newEntry);
-        return entries;
+        return [...entries, newEntry];
       }
 
       // add the radius point
-      entries[entries.length - 1].points.push(latLng);
-      return entries;
+      return [
+        ...entries.slice(0, -1),
+        {
+          ...entries[entries.length - 1],
+          points: [...entries[entries.length - 1].points, latLng],
+        },
+      ];
     },
     [],
   );

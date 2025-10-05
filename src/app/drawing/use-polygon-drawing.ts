@@ -10,8 +10,7 @@ export function usePolygonDrawing() {
       const lastEntry = entries[entries.length - 1];
       if (!lastEntry || lastEntry.type !== "polygon") {
         const newEntry: DrawingEntry = { type: "polygon", points: [latLng] };
-        entries.push(newEntry);
-        return entries;
+        return [...entries, newEntry];
       }
 
       // already closed, create new polygon
@@ -22,13 +21,17 @@ export function usePolygonDrawing() {
         lastEntry.points.length > 2
       ) {
         const newEntry: DrawingEntry = { type: "polygon", points: [latLng] };
-        entries.push(newEntry);
-        return entries;
+        return [...entries, newEntry];
       }
 
       // add the point
-      entries[entries.length - 1].points.push(latLng);
-      return entries;
+      return [
+        ...entries.slice(0, -1),
+        {
+          ...entries[entries.length - 1],
+          points: [...entries[entries.length - 1].points, latLng],
+        },
+      ];
     },
     [],
   );

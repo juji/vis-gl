@@ -54,6 +54,8 @@ export function useDrawController(drawingTool: DrawingTool) {
 
     objects.current = [];
 
+    console.log("presentHistoryState:", presentHistoryState);
+
     presentHistoryState.forEach((entry) => {
       const updateEntry = (newPoints: google.maps.LatLng[]) => {
         const newEntries = presentHistoryState.map((e) => {
@@ -94,19 +96,19 @@ export function useDrawController(drawingTool: DrawingTool) {
       if (!e.latLng) return;
 
       if (drawingTool === "polygon") {
-        const newEntries = onPolygonClick(e.latLng, entries);
+        const newEntries = onPolygonClick(e.latLng, presentHistoryState);
         console.log("Polygon drawing entries:", newEntries);
         newEntries && setEntries([...newEntries]);
       } else if (drawingTool === "line") {
-        const newEntries = onLineClick(e.latLng, entries);
+        const newEntries = onLineClick(e.latLng, presentHistoryState);
         console.log("Line drawing entries:", newEntries);
         newEntries && setEntries([...newEntries]);
       } else if (drawingTool === "circle") {
-        const newEntries = onCircleClick(e.latLng, entries);
+        const newEntries = onCircleClick(e.latLng, presentHistoryState);
         console.log("Circle drawing entries:", newEntries);
         newEntries && setEntries([...newEntries]);
       } else if (drawingTool === "rectangle") {
-        const newEntries = onRectangleClick(e.latLng, entries);
+        const newEntries = onRectangleClick(e.latLng, presentHistoryState);
         console.log("Rectangle drawing entries:", newEntries);
         newEntries && setEntries([...newEntries]);
       }
@@ -119,7 +121,7 @@ export function useDrawController(drawingTool: DrawingTool) {
   }, [
     map,
     drawingTool,
-    entries,
+    presentHistoryState,
     onPolygonClick,
     onLineClick,
     onCircleClick,

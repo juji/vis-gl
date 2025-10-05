@@ -10,20 +10,23 @@ export function useLineDrawing() {
       const lastEntry = entries[entries.length - 1];
       if (!lastEntry || lastEntry.type !== "line") {
         const newEntry: DrawingEntry = { type: "line", points: [latLng] };
-        entries.push(newEntry);
-        return entries;
+        return [...entries, newEntry];
       }
 
       // Line needs at least 2 points, close after second point
       if (lastEntry.points.length >= 2) {
         const newEntry: DrawingEntry = { type: "line", points: [latLng] };
-        entries.push(newEntry);
-        return entries;
+        return [...entries, newEntry];
       }
 
       // add the point
-      entries[entries.length - 1].points.push(latLng);
-      return entries;
+      return [
+        ...entries.slice(0, -1),
+        {
+          ...entries[entries.length - 1],
+          points: [...entries[entries.length - 1].points, latLng],
+        },
+      ];
     },
     [],
   );
