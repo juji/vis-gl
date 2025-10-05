@@ -237,7 +237,8 @@ export default function ClusteringPage() {
       {error && <div className={styles.error}>Error: {error}</div>}
       <div className={styles.stats}>
         <span>
-          Total Breweries: {Array.isArray(breweries) ? breweries.length : 0}
+          Max. Breweries / request:{" "}
+          {Array.isArray(breweries) ? breweries.length : 0}
         </span>
         <span>Clusters: {clusters.length}</span>
       </div>
