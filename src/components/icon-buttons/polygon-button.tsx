@@ -7,6 +7,7 @@ interface PolygonButtonProps {
   active?: boolean;
   size?: number;
   disabled?: boolean;
+  title?: string;
 }
 
 export function PolygonButton({
@@ -14,9 +15,16 @@ export function PolygonButton({
   active = false,
   size = 48,
   disabled = false,
+  title,
 }: PolygonButtonProps) {
   return (
-    <Button onClick={onClick} active={active} size={size} disabled={disabled}>
+    <Button
+      onClick={onClick}
+      active={active}
+      size={size}
+      disabled={disabled}
+      title={title}
+    >
       <svg
         viewBox="0 0 24 24"
         fill="none"

@@ -7,6 +7,7 @@ interface RectangleButtonProps {
   active?: boolean;
   size?: number;
   disabled?: boolean;
+  title?: string;
 }
 
 export function RectangleButton({
@@ -14,9 +15,16 @@ export function RectangleButton({
   active = false,
   size = 48,
   disabled = false,
+  title,
 }: RectangleButtonProps) {
   return (
-    <Button onClick={onClick} active={active} size={size} disabled={disabled}>
+    <Button
+      onClick={onClick}
+      active={active}
+      size={size}
+      disabled={disabled}
+      title={title}
+    >
       <svg
         viewBox="0 0 24 24"
         fill="none"

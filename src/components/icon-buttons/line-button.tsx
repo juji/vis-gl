@@ -7,6 +7,7 @@ interface LineButtonProps {
   active?: boolean;
   size?: number;
   disabled?: boolean;
+  title?: string;
 }
 
 export function LineButton({
@@ -14,9 +15,16 @@ export function LineButton({
   active = false,
   size = 48,
   disabled = false,
+  title,
 }: LineButtonProps) {
   return (
-    <Button onClick={onClick} active={active} size={size} disabled={disabled}>
+    <Button
+      onClick={onClick}
+      active={active}
+      size={size}
+      disabled={disabled}
+      title={title}
+    >
       <svg
         viewBox="0 0 24 24"
         fill="none"

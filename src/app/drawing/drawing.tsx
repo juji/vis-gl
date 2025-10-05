@@ -27,21 +27,25 @@ export function Drawing() {
               size={40}
               active={activeTool === "polygon"}
               onClick={() => handleToolSelect("polygon")}
+              title="Draw Polygon"
             />
             <LineButton
               size={40}
               active={activeTool === "line"}
               onClick={() => handleToolSelect("line")}
+              title="Draw Line"
             />
             <CircleButton
               size={40}
               active={activeTool === "circle"}
               onClick={() => handleToolSelect("circle")}
+              title="Draw Circle"
             />
             <RectangleButton
               size={40}
               active={activeTool === "rectangle"}
               onClick={() => handleToolSelect("rectangle")}
+              title="Draw Rectangle"
             />
           </div>
         </MapControl>
