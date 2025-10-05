@@ -212,7 +212,11 @@ export function useDrawController(drawingTool: DrawingTool) {
   // biome-ignore lint/correctness/useExhaustiveDependencies: will loop on every change
   useEffect(() => {
     if (entries.length === 0) return;
-    addHistoryEntry([...entries]);
+    const entryCopy = entries.map((v) => ({
+      type: v.type,
+      points: [...v.points],
+    }));
+    addHistoryEntry(entryCopy);
   }, [entries]);
 
   useEffect(() => {
