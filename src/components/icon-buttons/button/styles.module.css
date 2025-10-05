@@ -83,8 +83,12 @@
   white-space: nowrap;
   z-index: 1000;
   pointer-events: none;
-  opacity: 1;
+  opacity: 0;
   transition: opacity 0.2s ease;
+}
+
+.buttonContainer:hover .tooltip {
+  opacity: 1;
 }
 
 .tooltip::after {

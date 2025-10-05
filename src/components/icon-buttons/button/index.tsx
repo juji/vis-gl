@@ -1,7 +1,6 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useState } from "react";
 import styles from "./styles.module.css";
 
 interface ButtonProps {
@@ -23,8 +22,6 @@ export function Button({
   className = "",
   title,
 }: ButtonProps) {
-  const [isHovered, setIsHovered] = useState(false);
-
   return (
     <div className={styles.buttonContainer}>
       <button
@@ -36,12 +33,10 @@ export function Button({
         onClick={onClick}
         disabled={disabled}
         type="button"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
       >
         <div className={styles.icon}>{children}</div>
       </button>
-      {title && isHovered && <div className={styles.tooltip}>{title}</div>}
+      {title && <div className={styles.tooltip}>{title}</div>}
     </div>
   );
 }
