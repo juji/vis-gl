@@ -227,99 +227,98 @@ export default function ClusteringPage() {
   // }, [fetchBreweries]);
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <h1>Brewery Clustering</h1>
-        {loading ? (
-          <p>Loading breweries...</p>
-        ) : (
-          <p>Zoom in to see individual locations.</p>
-        )}
-        {error && <div className={styles.error}>Error: {error}</div>}
-        <div className={styles.stats}>
-          <span>
-            Total Breweries: {Array.isArray(breweries) ? breweries.length : 0}
-          </span>
-          <span>Clusters: {clusters.length}</span>
-        </div>
+    <>
+      <h1>Brewery Clustering</h1>
+      {loading ? (
+        <p>Loading breweries...</p>
+      ) : (
+        <p>Zoom in to see individual locations.</p>
+      )}
+      {error && <div className={styles.error}>Error: {error}</div>}
+      <div className={styles.stats}>
+        <span>
+          Total Breweries: {Array.isArray(breweries) ? breweries.length : 0}
+        </span>
+        <span>Clusters: {clusters.length}</span>
       </div>
+      <br />
 
-      <div className={styles.mapContainer}>
-        <SimpleMap
-          mapId="clustering-map"
-          height="600px"
-          onCameraChanged={handleCameraChanged}
-          defaultCenter={DEFAULT_CENTER}
-          defaultZoom={DEFAULT_ZOOM}
-        >
-          {clusters.map((cluster, _index: number) => {
-            const { cluster: isCluster, point_count: pointCount } =
-              cluster.properties;
+      <SimpleMap
+        mapId="clustering-map"
+        height="600px"
+        onCameraChanged={handleCameraChanged}
+        defaultCenter={DEFAULT_CENTER}
+        defaultZoom={DEFAULT_ZOOM}
+      >
+        {clusters.map((cluster, _index: number) => {
+          const { cluster: isCluster, point_count: pointCount } =
+            cluster.properties;
 
-            if (isCluster) {
-              return (
-                <ClusterMarker
-                  key={`cluster-${cluster.geometry.coordinates.join(",")}-${pointCount}`}
-                  count={pointCount || 0}
-                  position={{
+          if (isCluster) {
+            return (
+              <ClusterMarker
+                key={`cluster-${cluster.geometry.coordinates.join(",")}-${pointCount}`}
+                count={pointCount || 0}
+                position={{
+                  lat: cluster.geometry.coordinates[1],
+                  lng: cluster.geometry.coordinates[0],
+                }}
+                onClick={() =>
+                  handleClusterClick({
                     lat: cluster.geometry.coordinates[1],
                     lng: cluster.geometry.coordinates[0],
-                  }}
-                  onClick={() =>
-                    handleClusterClick({
-                      lat: cluster.geometry.coordinates[1],
-                      lng: cluster.geometry.coordinates[0],
-                    })
-                  }
-                />
-              );
-            }
+                  })
+                }
+              />
+            );
+          }
 
-            // Find the brewery data for this individual marker
-            const brewery = Array.isArray(breweries)
-              ? breweries.find((b) => b.id === cluster.properties.breweryId)
-              : null;
+          // Find the brewery data for this individual marker
+          const brewery = Array.isArray(breweries)
+            ? breweries.find((b) => b.id === cluster.properties.breweryId)
+            : null;
 
-            if (brewery) {
-              return (
-                <Marker
-                  key={`brewery-${brewery.id}`}
-                  brewery={brewery}
-                  position={{
+          if (brewery) {
+            return (
+              <Marker
+                key={`brewery-${brewery.id}`}
+                brewery={brewery}
+                position={{
+                  lat: cluster.geometry.coordinates[1],
+                  lng: cluster.geometry.coordinates[0],
+                }}
+                onClick={() =>
+                  showPopup(brewery, {
                     lat: cluster.geometry.coordinates[1],
                     lng: cluster.geometry.coordinates[0],
-                  }}
-                  onClick={() =>
-                    showPopup(brewery, {
-                      lat: cluster.geometry.coordinates[1],
-                      lng: cluster.geometry.coordinates[0],
-                    })
-                  }
-                />
-              );
-            }
+                  })
+                }
+              />
+            );
+          }
 
-            return null;
-          })}
+          return null;
+        })}
 
-          {/* Global popup - only one can be shown at a time */}
-          {activePopup && (
-            <BreweryPopup
-              brewery={activePopup.brewery}
-              position={activePopup.position}
-              marker={activePopup.marker}
-              onClose={hidePopup}
-            />
-          )}
-
-          {/* Map control for programmatic camera changes */}
-          <MapControl
-            lat={mapControlLat}
-            lng={mapControlLng}
-            zoom={mapControlZoom}
+        {/* Global popup - only one can be shown at a time */}
+        {activePopup && (
+          <BreweryPopup
+            brewery={activePopup.brewery}
+            position={activePopup.position}
+            marker={activePopup.marker}
+            onClose={hidePopup}
           />
-        </SimpleMap>
-      </div>
+        )}
+
+        {/* Map control for programmatic camera changes */}
+        <MapControl
+          lat={mapControlLat}
+          lng={mapControlLng}
+          zoom={mapControlZoom}
+        />
+      </SimpleMap>
+
+      <br />
 
       {/* Technical Details Section */}
       <div className={styles.technicalDetails}>
@@ -375,6 +374,6 @@ export default function ClusteringPage() {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
