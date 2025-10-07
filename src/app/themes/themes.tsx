@@ -53,6 +53,15 @@ const MAP_CONFIGS: MapConfig[] = [
     mapTypeId: MapTypeId.TERRAIN,
   },
   {
+    id: "blue_theme",
+    useId: false,
+    label: "Blue Theme",
+    description: "Custom style map (raster)",
+    mapTypeId: MapTypeId.ROADMAP,
+    styles: blue,
+    renderingType: "RASTER",
+  },
+  {
     id: "custom_monochrome_light",
     useId: true,
     label: "Custom Monochrome - Light",
@@ -69,15 +78,6 @@ const MAP_CONFIGS: MapConfig[] = [
     mapTypeId: MapTypeId.ROADMAP,
     mapId: "42a2a67291fa166a36624128",
     colorScheme: "DARK",
-  },
-  {
-    id: "blue_theme",
-    useId: false,
-    label: "Blue Theme",
-    description: "Custom style map (raster)",
-    mapTypeId: MapTypeId.ROADMAP,
-    styles: blue,
-    renderingType: "RASTER",
   },
 ];
 
@@ -134,10 +134,10 @@ export function Themes() {
       {/* Map Display */}
       <SimpleMap
         mapId={selectedConfig.useId ? selectedConfig.mapId : undefined}
-        mapTypeId={selectedConfig.mapTypeId as google.maps.MapTypeId}
-        colorScheme={selectedConfig.colorScheme}
-        styles={selectedConfig.styles}
-        renderingType={selectedConfig.renderingType}
+        renderingType={selectedConfig.renderingType || undefined}
+        mapTypeId={selectedConfig.mapTypeId || undefined}
+        colorScheme={selectedConfig.colorScheme || undefined}
+        styles={selectedConfig.styles || undefined}
         height="500px"
         defaultCenter={{ lat: -6.5, lng: 107.5 }}
         defaultZoom={8}

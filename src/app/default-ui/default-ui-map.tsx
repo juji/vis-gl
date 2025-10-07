@@ -3,5 +3,11 @@
 import { SimpleMap } from "@/components/maps/simple";
 
 export function DefaultUiMap() {
-  return <SimpleMap disableDefaultUI={false} height="500px" />;
+  return (
+    <SimpleMap
+      mapId={"default-ui-map"}
+      disableDefaultUI={false}
+      height="500px"
+    />
+  );
 }
