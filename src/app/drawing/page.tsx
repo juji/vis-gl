@@ -5,25 +5,6 @@ import { Drawing } from "./drawing";
 export default function DrawingPage() {
   const technicalSections = [
     {
-      emoji: "🎨",
-      title: "Interactive Drawing",
-      content: (
-        <p>
-          Built with{" "}
-          <a
-            href="https://visgl.github.io/react-google-maps/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <strong>@vis.gl/react-google-maps</strong>
-          </a>{" "}
-          and Google Maps API. Features real-time drawing of polygons, lines,
-          circles, and rectangles with full editing capabilities including drag,
-          resize, and vertex manipulation.
-        </p>
-      ),
-    },
-    {
       emoji: "🔄",
       title: "Undo/Redo System",
       content: (
