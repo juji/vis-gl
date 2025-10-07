@@ -239,7 +239,7 @@ export function ClusteringMap() {
       <br />
 
       <GoogleMap
-        mapId="clustering-map"
+        mapId="clustering-map-raster"
         style={{ height: "600px" }}
         onCameraChanged={handleCameraChanged}
         defaultCenter={DEFAULT_CENTER}
@@ -247,6 +247,7 @@ export function ClusteringMap() {
         gestureHandling="greedy"
         disableDefaultUI={true}
         reuseMaps={true}
+        renderingType={"RASTER"} // faster rendering for many markers
       >
         {clusters.map((cluster, _index: number) => {
           const { cluster: isCluster, point_count: pointCount } =
