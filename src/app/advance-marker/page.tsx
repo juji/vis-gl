@@ -18,9 +18,17 @@ export default function AdvanceMarkerPage() {
         Pin,
         useAdvancedMarkerRef,
       } from "@vis.gl/react-google-maps";
+      
+      // need to undo the dark mode
+      // for scrollbar
+      import "./info-window.css"; 
+
+      // --
 
       const [markerRef, marker] = useAdvancedMarkerRef();
       const [infoWindowShown, setInfoWindowShown] = useState(false);
+
+      // --
 
       <SimpleMap 
         mapId={id}
