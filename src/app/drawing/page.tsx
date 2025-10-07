@@ -22,11 +22,11 @@ export default function DrawingPage() {
       content: (
         <p>
           <a
-            href="https://github.com/juji/vis-gl/blob/main/src/app/drawing/page.tsx"
+            href="https://github.com/juji/vis-gl/blob/main/src/app/drawing/use-draw-controller.tsx"
             target="_blank"
             rel="noopener noreferrer"
           >
-            https://github.com/juji/vis-gl/blob/main/src/app/drawing/page.tsx
+            https://github.com/juji/vis-gl/blob/main/src/app/drawing/use-draw-controller.tsx
           </a>
           .
         </p>

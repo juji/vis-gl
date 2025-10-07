@@ -36,6 +36,7 @@ const Links: MenuItem[] = [
   },
   { href: "/clustering", label: "Clustering" },
   { href: "/drawing", label: "Drawing" },
+  { href: "/themes", label: "Themes" },
 ];
 
 function MenuItemComponent({
