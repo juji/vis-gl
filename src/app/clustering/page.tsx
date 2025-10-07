@@ -1,9 +1,9 @@
 "use client";
 
 import type { MapCameraChangedEvent } from "@vis.gl/react-google-maps";
+import { APIProvider, Map as GoogleMap } from "@vis.gl/react-google-maps";
 import { type RefObject, useCallback, useMemo, useRef, useState } from "react";
 import SuperCluster from "supercluster";
-import { SimpleMap } from "@/components/maps/simple";
 import TechnicalHighlights from "@/components/technical-highlights";
 import { ClusterMarker } from "./cluster";
 import styles from "./clustering.module.css";
@@ -245,80 +245,85 @@ export default function ClusteringPage() {
       </div>
       <br />
 
-      <SimpleMap
-        mapId="clustering-map"
-        height="600px"
-        onCameraChanged={handleCameraChanged}
-        defaultCenter={DEFAULT_CENTER}
-        defaultZoom={DEFAULT_ZOOM}
-      >
-        {clusters.map((cluster, _index: number) => {
-          const { cluster: isCluster, point_count: pointCount } =
-            cluster.properties;
+      <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ""}>
+        <GoogleMap
+          mapId="clustering-map"
+          style={{ height: "600px" }}
+          onCameraChanged={handleCameraChanged}
+          defaultCenter={DEFAULT_CENTER}
+          defaultZoom={DEFAULT_ZOOM}
+          gestureHandling="greedy"
+          disableDefaultUI={true}
+          reuseMaps={true}
+        >
+          {clusters.map((cluster, _index: number) => {
+            const { cluster: isCluster, point_count: pointCount } =
+              cluster.properties;
 
-          if (isCluster) {
-            return (
-              <ClusterMarker
-                key={`cluster-${cluster.geometry.coordinates.join(",")}-${pointCount}`}
-                count={pointCount || 0}
-                position={{
-                  lat: cluster.geometry.coordinates[1],
-                  lng: cluster.geometry.coordinates[0],
-                }}
-                onClick={() =>
-                  handleClusterClick({
+            if (isCluster) {
+              return (
+                <ClusterMarker
+                  key={`cluster-${cluster.geometry.coordinates.join(",")}-${pointCount}`}
+                  count={pointCount || 0}
+                  position={{
                     lat: cluster.geometry.coordinates[1],
                     lng: cluster.geometry.coordinates[0],
-                  })
-                }
-              />
-            );
-          }
+                  }}
+                  onClick={() =>
+                    handleClusterClick({
+                      lat: cluster.geometry.coordinates[1],
+                      lng: cluster.geometry.coordinates[0],
+                    })
+                  }
+                />
+              );
+            }
 
-          // Find the brewery data for this individual marker
-          const brewery = Array.isArray(breweries)
-            ? breweries.find((b) => b.id === cluster.properties.breweryId)
-            : null;
+            // Find the brewery data for this individual marker
+            const brewery = Array.isArray(breweries)
+              ? breweries.find((b) => b.id === cluster.properties.breweryId)
+              : null;
 
-          if (brewery) {
-            return (
-              <Marker
-                key={`brewery-${brewery.id}`}
-                brewery={brewery}
-                position={{
-                  lat: cluster.geometry.coordinates[1],
-                  lng: cluster.geometry.coordinates[0],
-                }}
-                onClick={() =>
-                  showPopup(brewery, {
+            if (brewery) {
+              return (
+                <Marker
+                  key={`brewery-${brewery.id}`}
+                  brewery={brewery}
+                  position={{
                     lat: cluster.geometry.coordinates[1],
                     lng: cluster.geometry.coordinates[0],
-                  })
-                }
-              />
-            );
-          }
+                  }}
+                  onClick={() =>
+                    showPopup(brewery, {
+                      lat: cluster.geometry.coordinates[1],
+                      lng: cluster.geometry.coordinates[0],
+                    })
+                  }
+                />
+              );
+            }
 
-          return null;
-        })}
+            return null;
+          })}
 
-        {/* Global popup - only one can be shown at a time */}
-        {activePopup && (
-          <BreweryPopup
-            brewery={activePopup.brewery}
-            position={activePopup.position}
-            marker={activePopup.marker}
-            onClose={hidePopup}
+          {/* Global popup - only one can be shown at a time */}
+          {activePopup && (
+            <BreweryPopup
+              brewery={activePopup.brewery}
+              position={activePopup.position}
+              marker={activePopup.marker}
+              onClose={hidePopup}
+            />
+          )}
+
+          {/* Map control for programmatic camera changes */}
+          <MapControl
+            lat={mapControlLat}
+            lng={mapControlLng}
+            zoom={mapControlZoom}
           />
-        )}
-
-        {/* Map control for programmatic camera changes */}
-        <MapControl
-          lat={mapControlLat}
-          lng={mapControlLng}
-          zoom={mapControlZoom}
-        />
-      </SimpleMap>
+        </GoogleMap>
+      </APIProvider>
 
       <br />
 
