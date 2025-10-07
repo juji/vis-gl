@@ -1,0 +1,18 @@
+/* Light theme scrollbar colors for InfoWindow - color adjustments only */
+.gm-style-iw-d,
+.gm-style-iw-c,
+.gm-style-iw {
+  scrollbar-color: #e0e0e0 transparent !important;
+}
+
+.gm-style-iw-d::-webkit-scrollbar-track,
+.gm-style-iw-c::-webkit-scrollbar-track,
+.gm-style-iw::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+.gm-style-iw-d::-webkit-scrollbar-thumb,
+.gm-style-iw-c::-webkit-scrollbar-thumb,
+.gm-style-iw::-webkit-scrollbar-thumb {
+  background: #e0e0e0 !important;
+}
