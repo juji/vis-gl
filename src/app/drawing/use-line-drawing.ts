@@ -4,30 +4,31 @@ import type { DrawingEntry } from "./types";
 
 export function useLineDrawing() {
   const map = useMap();
-  const addPoint = useRef(false);
+  const lastLine = useRef<google.maps.Polyline | null>(null);
+  const lineToCursor = useRef<google.maps.Polyline | null>(null);
 
-  const addPointToLine = useCallback(
+  const onClick = useCallback(
     (latLng: google.maps.LatLng, entries: DrawingEntry[]) => {
       const lastEntry = entries[entries.length - 1];
-      if (!lastEntry || lastEntry.type !== "line") {
-        console.warn("No line to add point to");
-        return entries;
+
+      // start a new line
+      if (!lastEntry || lastEntry.type !== "line" || lastEntry.done) {
+        const newEntry: DrawingEntry = {
+          type: "line",
+          points: [latLng],
+          done: false,
+        };
+        return [...entries, newEntry];
       }
+
+      // add the point
       return [
         ...entries.slice(0, -1),
         {
-          ...lastEntry,
-          points: [...lastEntry.points, latLng],
+          ...entries[entries.length - 1],
+          points: [...entries[entries.length - 1].points, latLng],
         },
       ];
-    },
-    [],
-  );
-
-  const createNewLine = useCallback(
-    (latLng: google.maps.LatLng, entries: DrawingEntry[]) => {
-      const newEntry: DrawingEntry = { type: "line", points: [latLng] };
-      return [...entries, newEntry];
     },
     [],
   );
@@ -35,7 +36,7 @@ export function useLineDrawing() {
   const startListeners = useCallback(
     (
       presentHistoryState: DrawingEntry[],
-      setEntries: (entries: DrawingEntry[]) => void,
+      addHistoryEntry: (entries: DrawingEntry[]) => void,
     ) => {
       if (!map) return;
 
@@ -43,119 +44,183 @@ export function useLineDrawing() {
       map.addListener("click", (e: google.maps.MapMouseEvent) => {
         if (!e.latLng) return;
 
-        console.log("Line drawing click at", e.latLng.toString());
-
-        if (!addPoint.current) {
-          addPoint.current = true;
-          const newEntries = createNewLine(e.latLng, presentHistoryState);
-          setEntries(newEntries);
-        } else {
-          const newEntries = addPointToLine(e.latLng, presentHistoryState);
-          setEntries(newEntries);
-        }
+        const newEntries = onClick(e.latLng, presentHistoryState);
+        addHistoryEntry(newEntries);
       });
 
-      // map.addListener("mousemove", (e: google.maps.MapMouseEvent) => {
-      // });
+      map.addListener("mousemove", (e: google.maps.MapMouseEvent) => {
+        lineToCursor.current?.setMap(null);
+        const lastEntry = presentHistoryState[presentHistoryState.length - 1];
+
+        if (!lastEntry || lastEntry.type !== "line") return;
+        if (!lastLine.current) return;
+        if (!e.latLng) return;
+
+        const polyline = new google.maps.Polyline({
+          path: [
+            lastLine.current
+              .getPath()
+              .getAt(lastLine.current.getPath().getLength() - 1),
+            e.latLng,
+          ],
+          strokeColor: "#0066FF",
+          strokeOpacity: 0.4,
+          strokeWeight: 2,
+          editable: false,
+          clickable: false,
+          geodesic: true,
+        });
+        polyline.setMap(map);
+        lineToCursor.current = polyline;
+      });
 
       return () => {
         map.setOptions({ draggableCursor: "" });
         google.maps.event.clearListeners(map, "click");
         google.maps.event.clearListeners(map, "mousemove");
+        lineToCursor.current?.setMap(null);
+        lineToCursor.current = null;
       };
     },
-    [map, addPointToLine, createNewLine],
+    [map, onClick],
   );
 
   const draw = useCallback(
     (
-      points: google.maps.LatLng[],
-      onChange?: (points: google.maps.LatLng[]) => void,
+      entry: DrawingEntry,
+      onChange?: (entry: DrawingEntry) => void,
       isLastOfType = false,
     ) => {
-      if (!map || points.length === 0) return;
-
-      console.log("Drawing line with points:", points, isLastOfType);
-
-      const isCLosed = points[0].equals(points[points.length - 1]);
-      const firstPointInit = new google.maps.LatLng(points[0]);
-
-      const polyline = new google.maps.Polyline({
-        path: points,
-        strokeColor: "#0000FF",
-        strokeOpacity: isLastOfType && addPoint.current ? 0.4 : 0.8,
-        strokeWeight: 3,
-        editable: true,
-      });
-
-      polyline.setMap(map);
+      if (!map) return;
 
       const listeners: google.maps.MapsEventListener[] = [];
 
-      const clickListener = polyline.addListener(
-        "click",
-        (e: google.maps.MapMouseEvent) => {
-          if (e.latLng) {
-            // check if the last point or first point is clicked
-            const path = polyline.getPath();
-            const lastPoint = path.getAt(path.getLength() - 1);
-            const firstPoint = path.getAt(0);
-            if (lastPoint?.equals(e.latLng)) {
-              // finish the line drawing
-              addPoint.current = false;
-              onChange?.(path.getArray());
-            } else if (firstPoint?.equals(e.latLng)) {
-              // connect last point to first point
-              path.push(firstPoint);
-              addPoint.current = false;
-              onChange?.(path.getArray());
-            }
-          }
-        },
-      );
-      listeners.push(clickListener);
+      const isDone = entry.done;
 
-      function changePath() {
-        // remove undo icon
-        const undo = document.querySelector(
-          'img[src$="undo_poly.png"]',
-        ) as HTMLImageElement;
-        if (undo) undo.style.display = "none";
-
-        const path = polyline.getPath();
-        const lastPoint = path.getAt(path.getLength() - 1);
-        const firstPoint = path.getAt(0);
-
-        if (isCLosed) {
-          if (
-            !lastPoint?.equals(firstPointInit) &&
-            firstPoint?.equals(firstPointInit)
-          ) {
-            path.setAt(0, lastPoint);
-          }
-
-          if (
-            !firstPoint?.equals(firstPointInit) &&
-            lastPoint?.equals(firstPointInit)
-          ) {
-            path.setAt(path.getLength() - 1, firstPoint);
-          }
+      if (isDone) {
+        if (isLastOfType) {
+          lastLine.current = null;
         }
-        onChange?.(polyline.getPath().getArray());
+
+        const polyline = new google.maps.Polyline({
+          path: entry.points,
+          strokeColor: "#0066FF",
+          strokeOpacity: 1.0,
+          strokeWeight: 2,
+          editable: true,
+          geodesic: true,
+        });
+        polyline.setMap(map);
+        function changePaths() {
+          // remove undo icon
+          const undo = document.querySelector(
+            'img[src$="undo_poly.png"]',
+          ) as HTMLImageElement;
+          if (undo) undo.style.display = "none";
+
+          onChange?.({
+            ...entry,
+            points: [
+              ...polyline.getPath().getArray(),
+              polyline.getPath().getAt(0),
+            ],
+          });
+        }
+
+        listeners.push(
+          google.maps.event.addListener(
+            polyline.getPath(),
+            "insert_at",
+            changePaths,
+          ),
+        );
+        listeners.push(
+          google.maps.event.addListener(
+            polyline.getPath(),
+            "set_at",
+            changePaths,
+          ),
+        );
+        return { shape: polyline, listeners };
+      } else {
+        const polyline = new google.maps.Polyline({
+          path: entry.points,
+          strokeColor: "#0066FF",
+          strokeOpacity: 1.0,
+          strokeWeight: 2,
+          editable: true,
+          geodesic: true,
+        });
+        polyline.setMap(map);
+
+        if (isLastOfType) {
+          lastLine.current = polyline;
+        }
+
+        // check if first point is clicked
+        // if so, close the polygon
+        const clickListener = polyline.addListener(
+          "click",
+          (e: google.maps.MapMouseEvent) => {
+            if (!e.latLng) return;
+
+            const firstPoint = polyline.getPath().getAt(0);
+            const lastPoint = polyline
+              .getPath()
+              .getAt(polyline.getPath().getLength() - 1);
+
+            // done
+            if (firstPoint?.equals(e.latLng)) {
+              // console.log('firstPoint clicked')
+              onChange?.({
+                ...entry,
+                points: [...entry.points, firstPoint],
+                done: true,
+              });
+            }
+
+            // also done
+            else if (lastPoint?.equals(e.latLng)) {
+              // console.log('lastPoint clicked')
+              onChange?.({
+                ...entry,
+                done: true,
+              });
+            }
+          },
+        );
+        listeners.push(clickListener);
+
+        // hover listener
+        const hoverListener = polyline.addListener(
+          "mouseover",
+          (e: google.maps.MapMouseEvent) => {
+            if (!e.latLng) return;
+            const firstPoint = polyline.getPath().getAt(0);
+            const lastPoint = polyline
+              .getPath()
+              .getAt(polyline.getPath().getLength() - 1);
+
+            if (firstPoint?.equals(e.latLng) && lineToCursor.current) {
+              lineToCursor.current
+                .getPath()
+                .setAt(
+                  lineToCursor.current.getPath().getLength() - 1,
+                  firstPoint,
+                );
+            } else if (lastPoint?.equals(e.latLng)) {
+              // console.log('hover lastPoint');
+              if (lineToCursor.current) {
+                lineToCursor.current?.setMap(null);
+                lineToCursor.current = null;
+              }
+            }
+          },
+        );
+        listeners.push(hoverListener);
+
+        return { shape: polyline, listeners };
       }
-
-      listeners.push(
-        google.maps.event.addListener(
-          polyline.getPath(),
-          "insert_at",
-          changePath,
-        ),
-      );
-
-      listeners.push(
-        google.maps.event.addListener(polyline.getPath(), "set_at", changePath),
-      );
-      return { shape: polyline, listeners };
     },
     [map],
   );

@@ -1,5 +1,5 @@
 import { useMap } from "@vis.gl/react-google-maps";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import type { DrawingEntry, DrawingTool } from "./types";
 import { useCircleDrawing } from "./use-circle-drawing";
 import { useHistory } from "./use-history";
@@ -20,7 +20,7 @@ export function useDrawController(drawingTool: DrawingTool) {
     clean: historyClean,
   } = useHistory<DrawingEntry>();
 
-  const [entries, setEntries] = useState<DrawingEntry[]>([]);
+  const listeners = useRef<google.maps.MapsEventListener[]>([]);
   const objects = useRef<
     (
       | google.maps.Polygon
@@ -29,7 +29,6 @@ export function useDrawController(drawingTool: DrawingTool) {
       | google.maps.Rectangle
     )[]
   >([]);
-  const listeners = useRef<google.maps.MapsEventListener[]>([]);
 
   const { draw: drawPolygon, startListeners: startPolygonListeners } =
     usePolygonDrawing();
@@ -37,89 +36,86 @@ export function useDrawController(drawingTool: DrawingTool) {
     useLineDrawing();
   const { draw: drawCircle, startListeners: startCircleListeners } =
     useCircleDrawing();
-  const { draw: drawRectangle, startListeners: startRectangleListener } =
+  const { draw: drawRectangle, startListeners: startRectangleListeners } =
     useRectangleDrawing();
 
-  // Save to history
-  // biome-ignore lint/correctness/useExhaustiveDependencies: will loop on every change
   useEffect(() => {
-    if (entries.length === 0) return;
-    const entryCopy = entries.map((v) => ({
-      type: v.type,
-      points: [...v.points],
-    }));
-    addHistoryEntry(entryCopy);
-  }, [entries]);
-
-  useEffect(() => {
-    // Clear existing objects
-    objects.current.forEach((obj) => {
-      obj.setMap(null);
-    });
-
-    // clear existing listeners
-    listeners.current.forEach((listener) => {
-      google.maps.event.removeListener(listener);
-    });
-
-    listeners.current = [];
-    objects.current = [];
-
     const lastOfTypeIndexPolygon = presentHistoryState.findLastIndex(
       (e) => e.type === "polygon",
     );
+
     const lastOfTypeIndexLine = presentHistoryState.findLastIndex(
       (e) => e.type === "line",
     );
-    const lastOfTypeIndexCircle = presentHistoryState.findLastIndex(
-      (e) => e.type === "circle",
-    );
-    const lastOfTypeIndexRectangle = presentHistoryState.findLastIndex(
-      (e) => e.type === "rectangle",
-    );
 
     presentHistoryState.forEach((entry, idx) => {
-      const updateEntry = (newPoints: google.maps.LatLng[]) => {
+      const updateEntry = (newEntry: DrawingEntry) => {
+        console.log("updateEntry", newEntry);
+
         const newEntries = presentHistoryState.map((e) => {
           if (e === entry) {
-            return { ...e, points: newPoints };
+            return newEntry;
           }
           return e;
         });
-        setEntries(newEntries);
+        addHistoryEntry(newEntries);
       };
 
       if (entry.type === "polygon") {
         const isLastOfType = lastOfTypeIndexPolygon === idx;
-        const result = drawPolygon(entry.points, updateEntry, isLastOfType);
+        const result = drawPolygon(entry, updateEntry, isLastOfType);
         if (result) {
           objects.current.push(result.shape);
           listeners.current.push(...result.listeners);
         }
-      } else if (entry.type === "line") {
+      }
+
+      if (entry.type === "line") {
         const isLastOfType = lastOfTypeIndexLine === idx;
-        const result = drawLine(entry.points, updateEntry, isLastOfType);
+        const result = drawLine(entry, updateEntry, isLastOfType);
         if (result) {
           objects.current.push(result.shape);
           listeners.current.push(...result.listeners);
         }
-      } else if (entry.type === "circle") {
-        const isLastOfType = lastOfTypeIndexCircle === idx;
-        const result = drawCircle(entry.points, updateEntry, isLastOfType);
+      }
+
+      if (entry.type === "circle") {
+        const result = drawCircle(entry, updateEntry);
         if (result) {
           objects.current.push(result.shape);
           listeners.current.push(...result.listeners);
         }
-      } else if (entry.type === "rectangle") {
-        const isLastOfType = lastOfTypeIndexRectangle === idx;
-        const result = drawRectangle(entry.points, updateEntry, isLastOfType);
+      }
+
+      if (entry.type === "rectangle") {
+        const result = drawRectangle(entry, updateEntry);
         if (result) {
           objects.current.push(result.shape);
           listeners.current.push(...result.listeners);
         }
       }
     });
-  }, [presentHistoryState, drawPolygon, drawLine, drawCircle, drawRectangle]);
+
+    return () => {
+      // Clear objects
+      objects.current.forEach((obj) => {
+        obj.setMap(null);
+      });
+      // Clear listeners
+      listeners.current.forEach((listener) => {
+        google.maps.event.removeListener(listener);
+      });
+      objects.current = [];
+      listeners.current = [];
+    };
+  }, [
+    presentHistoryState,
+    addHistoryEntry,
+    drawPolygon,
+    drawLine,
+    drawCircle,
+    drawRectangle,
+  ]);
 
   useEffect(() => {
     if (!map) return;
@@ -127,13 +123,25 @@ export function useDrawController(drawingTool: DrawingTool) {
 
     let endListeners: (() => void) | undefined;
     if (drawingTool === "polygon") {
-      endListeners = startPolygonListeners(presentHistoryState, setEntries);
-    } else if (drawingTool === "line") {
-      endListeners = startLineListeners(presentHistoryState, setEntries);
-    } else if (drawingTool === "circle") {
-      endListeners = startCircleListeners(presentHistoryState, setEntries);
-    } else if (drawingTool === "rectangle") {
-      endListeners = startRectangleListener(presentHistoryState, setEntries);
+      endListeners = startPolygonListeners(
+        presentHistoryState,
+        addHistoryEntry,
+      );
+    }
+
+    if (drawingTool === "line") {
+      endListeners = startLineListeners(presentHistoryState, addHistoryEntry);
+    }
+
+    if (drawingTool === "circle") {
+      endListeners = startCircleListeners(presentHistoryState, addHistoryEntry);
+    }
+
+    if (drawingTool === "rectangle") {
+      endListeners = startRectangleListeners(
+        presentHistoryState,
+        addHistoryEntry,
+      );
     }
 
     return () => {
@@ -143,10 +151,11 @@ export function useDrawController(drawingTool: DrawingTool) {
     map,
     drawingTool,
     presentHistoryState,
+    addHistoryEntry,
     startPolygonListeners,
     startLineListeners,
     startCircleListeners,
-    startRectangleListener,
+    startRectangleListeners,
   ]);
 
   // Cleanup effect to remove all listeners and objects on unmount
