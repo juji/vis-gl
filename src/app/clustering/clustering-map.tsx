@@ -247,7 +247,7 @@ export function ClusteringMap() {
         gestureHandling="greedy"
         disableDefaultUI={true}
         reuseMaps={true}
-        renderingType={"RASTER"} // faster rendering for many markers
+        renderingType={"RASTER"} // faster rendering for faster interaction
       >
         {clusters.map((cluster, _index: number) => {
           const { cluster: isCluster, point_count: pointCount } =
