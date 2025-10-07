@@ -2,7 +2,7 @@
 
 import { APIProvider } from "@vis.gl/react-google-maps";
 import TechnicalHighlights from "@/components/technical-highlights";
-import { ClusteringMap } from "./map";
+import { ClusteringMap } from "./clustering-map";
 
 export default function ClusteringPage() {
   return (
