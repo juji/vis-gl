@@ -210,7 +210,7 @@ export function ClusteringMap() {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
       timeoutRef.current = setTimeout(() => {
         setLoading(true);
-      }, 500); // 500ms debounce
+      }, 300); // 300ms debounce
     }
   }, []);
 
