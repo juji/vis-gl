@@ -10,6 +10,18 @@ export default function AdvanceMarkerPage() {
       <AdvanceMarker />
       <br />
       <Code lang="tsx" clean="      ">{`
+
+      import {
+        AdvancedMarker,
+        AdvancedMarkerAnchorPoint,
+        InfoWindow,
+        Pin,
+        useAdvancedMarkerRef,
+      } from "@vis.gl/react-google-maps";
+
+      const [markerRef, marker] = useAdvancedMarkerRef();
+      const [infoWindowShown, setInfoWindowShown] = useState(false);
+
       <SimpleMap 
         mapId={id}
         height="500px"
@@ -19,13 +31,31 @@ export default function AdvanceMarkerPage() {
         <AdvancedMarker position={{ lat: -6.178306, lng: 106.631889 }} />
 
         {/* jakarta, green */}
-        <AdvancedMarker position={{lat: -6.200000, lng: 106.816666}}>
+        <AdvancedMarker 
+          ref={markerRef}
+          position={{ lat: -6.2, lng: 106.816666 }}
+          onClick={handleMarkerClick}
+        >
           <Pin
             background={'#0f9d58'}
             borderColor={'#006425'}
             glyphColor={'#60d98f'}
           />
         </AdvancedMarker>
+
+        {infoWindowShown && (
+          <InfoWindow
+            anchor={marker}
+            onCloseClick={handleClose}
+            maxWidth={300}
+            headerContent={
+              <h3 style={{ margin: 0, color: "#000" }}>Jakarta, Indonesia</h3>
+            }
+            ariaLabel="Jakarta marker information"
+          >
+            {/* InfoWindow content */}
+          </InfoWindow>
+        )}
 
         {/* Bandung, fully customized marker */}
         <AdvancedMarker 
