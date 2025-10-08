@@ -78,7 +78,7 @@ export function AutocompleteMap() {
         }}
       >
         <Autocomplete
-          placeholder="Search for breweries..."
+          placeholder="Search for breweries... e.g: brew"
           fetchData={fetchBreweries}
           onSelect={handleBrewerySelect}
           debounceMs={300}
@@ -190,17 +190,16 @@ export function AutocompleteMap() {
                 {/* Circular beer icon */}
                 <div
                   style={{
-                    width: "32px",
-                    height: "32px",
-                    backgroundColor: "#72dc26",
+                    width: "52px",
+                    height: "52px",
+                    backgroundColor: "#E67E22",
                     borderRadius: "50%",
-                    border: "3px solid #ffffff",
-                    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.3)",
+                    border: "3px solid #8B4513",
+                    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.7)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                     fontSize: "16px",
-                    padding: "21px",
                   }}
                 >
                   🍺
@@ -212,7 +211,7 @@ export function AutocompleteMap() {
                     height: "0",
                     borderLeft: "8px solid transparent",
                     borderRight: "8px solid transparent",
-                    borderTop: "12px solid #ffffff",
+                    borderTop: "12px solid #8B4513",
                     marginTop: "-3px",
                     filter: "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2))",
                   }}
