@@ -10,6 +10,7 @@ import { useCallback, useState } from "react";
 import Autocomplete, {
   type AutocompleteOption,
 } from "@/components/autocomplete";
+import styles from "./autocomplete-map.module.css";
 
 interface BreweryLocation {
   latitude: number;
@@ -65,18 +66,9 @@ export function AutocompleteMap() {
   );
 
   return (
-    <div style={{ position: "relative" }}>
+    <div className={styles.container}>
       {/* Autocomplete overlay */}
-      <div
-        style={{
-          position: "absolute",
-          top: "20px",
-          left: "20px",
-          right: "20px",
-          zIndex: 1000,
-          maxWidth: "400px",
-        }}
-      >
+      <div className={styles.autocompleteOverlay}>
         <Autocomplete
           placeholder="Search for breweries... e.g: brew"
           fetchData={fetchBreweries}
@@ -88,57 +80,23 @@ export function AutocompleteMap() {
         />
 
         {selectedBrewery && (
-          <div
-            style={{
-              marginTop: "12px",
-              padding: "16px",
-              backgroundColor: "#ffffff",
-              border: "1px solid #e2e8f0",
-              borderRadius: "12px",
-              boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
-            }}
-          >
-            <h3
-              style={{
-                margin: "0 0 8px 0",
-                fontSize: "1.125rem",
-                fontWeight: "600",
-                color: "#1e293b",
-              }}
-            >
-              {selectedBrewery.label}
-            </h3>
-            <p
-              style={{
-                margin: "0 0 8px 0",
-                fontSize: "0.875rem",
-                color: "#64748b",
-              }}
-            >
+          <div className={styles.breweryCard}>
+            <h3 className={styles.breweryTitle}>{selectedBrewery.label}</h3>
+            <p className={styles.breweryDescription}>
               {selectedBrewery.description}
             </p>
 
             {selectedBrewery.location.address && (
-              <p
-                style={{
-                  margin: "0 0 8px 0",
-                  fontSize: "0.875rem",
-                  color: "#4b5563",
-                }}
-              >
+              <p className={styles.breweryAddress}>
                 📍 {selectedBrewery.location.address}
               </p>
             )}
 
-            <div style={{ display: "flex", gap: "12px", marginTop: "8px" }}>
+            <div className={styles.contactLinks}>
               {selectedBrewery.contact.phone && (
                 <a
                   href={`tel:${selectedBrewery.contact.phone}`}
-                  style={{
-                    fontSize: "0.875rem",
-                    color: "#3b82f6",
-                    textDecoration: "none",
-                  }}
+                  className={styles.contactLink}
                 >
                   📞 Call
                 </a>
@@ -148,11 +106,7 @@ export function AutocompleteMap() {
                   href={selectedBrewery.contact.website_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{
-                    fontSize: "0.875rem",
-                    color: "#3b82f6",
-                    textDecoration: "none",
-                  }}
+                  className={styles.contactLink}
                 >
                   🌐 Website
                 </a>
@@ -169,7 +123,7 @@ export function AutocompleteMap() {
         defaultZoom={10}
         gestureHandling="greedy"
         disableDefaultUI={true}
-        style={{ width: "100%", height: "600px" }}
+        className={styles.map}
       >
         {selectedBrewery?.location.latitude &&
           selectedBrewery.location.longitude && (
@@ -180,42 +134,11 @@ export function AutocompleteMap() {
               }}
               anchorPoint={AdvancedMarkerAnchorPoint.BOTTOM_CENTER}
             >
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                }}
-              >
+              <div className={styles.markerContainer}>
                 {/* Circular beer icon */}
-                <div
-                  style={{
-                    width: "52px",
-                    height: "52px",
-                    backgroundColor: "#E67E22",
-                    borderRadius: "50%",
-                    border: "3px solid #8B4513",
-                    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.7)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "16px",
-                  }}
-                >
-                  🍺
-                </div>
+                <div className={styles.beerIcon}>🍺</div>
                 {/* Triangle pointing down */}
-                <div
-                  style={{
-                    width: "0",
-                    height: "0",
-                    borderLeft: "8px solid transparent",
-                    borderRight: "8px solid transparent",
-                    borderTop: "12px solid #8B4513",
-                    marginTop: "-3px",
-                    filter: "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2))",
-                  }}
-                />
+                <div className={styles.markerTriangle} />
               </div>
             </AdvancedMarker>
           )}
