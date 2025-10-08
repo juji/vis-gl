@@ -7,7 +7,7 @@ import Autocomplete, {
 
 async function fetchSuggestions(query: string): Promise<AutocompleteOption[]> {
   const response = await fetch(
-    `/api/suggestions?q=${encodeURIComponent(query)}`,
+    `/api/brewery/search?query=${encodeURIComponent(query)}`,
   );
   if (!response.ok) {
     throw new Error("Failed to fetch suggestions");
@@ -71,8 +71,8 @@ export default function TestPage() {
         }}
       >
         This page demonstrates the async autocomplete component with debounced
-        search functionality. Try typing "react", "node", "python", or any other
-        technology name.
+        search functionality. Try typing "stone", "ballast", "mission", or any
+        other brewery name.
       </p>
 
       <div style={{ marginBottom: "3rem" }}>
@@ -97,7 +97,7 @@ export default function TestPage() {
         </p>
 
         <Autocomplete
-          placeholder="Search for technologies..."
+          placeholder="Search for breweries..."
           fetchData={fetchSuggestions}
           onSelect={handleSelect}
           debounceMs={300}
@@ -154,7 +154,7 @@ export default function TestPage() {
         </p>
 
         <Autocomplete
-          placeholder="Add technologies to your stack..."
+          placeholder="Add breweries to your list..."
           fetchData={fetchSuggestions}
           onSelect={handleMultiSelect}
           debounceMs={250}
@@ -181,7 +181,7 @@ export default function TestPage() {
                 color: "#374151",
               }}
             >
-              Selected Technologies:
+              Selected Breweries:
             </h3>
             <div
               style={{
