@@ -1,3 +1,4 @@
+import Link from "next/link";
 import TechnicalHighlights from "@/components/technical-highlights";
 import { AutocompleteComponent } from "./autocomplete";
 
@@ -9,8 +10,15 @@ export default function AutocompletePage() {
       content: (
         <>
           <p>
-            Real-time brewery search using OpenBreweryDB API with debounced
-            input (300ms) for optimal performance.
+            Real-time brewery search using{" "}
+            <Link
+              href="https://openbrewerydb.org/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              OpenBreweryDB API
+            </Link>{" "}
+            with debounced input (300ms) for optimal performance.
           </p>
           <ul>
             <li>Minimum 2 characters to start searching</li>
