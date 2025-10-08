@@ -64,7 +64,7 @@ export function AutocompleteMap() {
   );
 
   return (
-    <div style={{ height: "100vh", width: "100%", position: "relative" }}>
+    <div style={{ position: "relative" }}>
       {/* Autocomplete overlay */}
       <div
         style={{
