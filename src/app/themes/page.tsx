@@ -15,17 +15,6 @@ export default function ThemesPage() {
       ),
     },
     {
-      emoji: "☁️",
-      title: "Cloud-Based Themes",
-      content: (
-        <p>
-          Uses Google Maps Platform's cloud-based styling with Map IDs for
-          professionally designed themes that can be managed through the Google
-          Cloud Console.
-        </p>
-      ),
-    },
-    {
       emoji: "🎨",
       title: "Custom Styling",
       content: (
@@ -33,6 +22,17 @@ export default function ThemesPage() {
           Implements custom map styling using MapTypeStyle arrays to create
           unique appearances like dark themes by targeting specific map features
           and elements.
+        </p>
+      ),
+    },
+    {
+      emoji: "☁️",
+      title: "Cloud-Based Themes",
+      content: (
+        <p>
+          Uses Google Maps Platform's cloud-based styling with Map IDs for
+          professionally designed themes that can be managed through the Google
+          Cloud Console.
         </p>
       ),
     },
