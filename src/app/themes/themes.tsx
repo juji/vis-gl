@@ -64,7 +64,7 @@ const MAP_CONFIGS: MapConfig[] = [
   {
     id: "custom_monochrome_light",
     useId: true,
-    label: "Custom Monochrome Light",
+    label: "Monochrome Light",
     description: "Cloud Based",
     mapTypeId: MapTypeId.ROADMAP,
     mapId: "42a2a67291fa166a36624128",
@@ -73,7 +73,7 @@ const MAP_CONFIGS: MapConfig[] = [
   {
     id: "custom_monochrome_dark",
     useId: true,
-    label: "Custom Monochrome Dark",
+    label: "Monochrome Dark",
     description: "Cloud Based",
     mapTypeId: MapTypeId.ROADMAP,
     mapId: "42a2a67291fa166a36624128",
