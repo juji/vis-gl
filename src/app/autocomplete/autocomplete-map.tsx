@@ -51,8 +51,9 @@ export function AutocompleteMap() {
 
       // Update map center and zoom if brewery has coordinates
       if (brewery.location.latitude && brewery.location.longitude && map) {
+        // make it offcenter so it wont be hidden under the description box
         map.setCenter({
-          lat: brewery.location.latitude,
+          lat: brewery.location.latitude + 0.004, // slight offset downwards
           lng: brewery.location.longitude,
         });
         map.setZoom(15); // Zoom in to show the brewery location
