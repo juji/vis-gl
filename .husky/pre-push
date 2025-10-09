@@ -1,13 +1,27 @@
-# check the difference between local and remote
-# if there is no difference, skip the build
-# if there is difference, run the build
-
+# Check for remote changes and build if needed
 branch=$(git rev-parse --abbrev-ref HEAD)
 
-git fetch origin "$branch"
-if git diff --quiet HEAD origin/"$branch"; then
-  echo "No changes detected. Skipping build."
+echo "🔍 Checking for remote changes on $branch..."
+
+if git fetch origin "$branch" 2>/dev/null; then
+  if git diff --quiet HEAD origin/"$branch"; then
+    echo "✅ No changes detected from remote. Skipping build."
+  else
+    echo "🔄 Remote changes detected. Merging and building..."
+    if git merge origin/"$branch" --no-edit; then
+      echo "🔨 Building project..."
+      if pnpm run build; then
+        echo "✅ Pre-push checks completed successfully!"
+      else
+        echo "❌ Build failed! Please fix build errors before pushing."
+        exit 1
+      fi
+    else
+      echo "❌ Merge failed! Please resolve conflicts and try again."
+      exit 1
+    fi
+  fi
 else
-  git merge origin/"$branch" "$branch"
-  pnpm run build
+  echo "⚠️  Could not fetch from remote..."
+  exit 1
 fi
