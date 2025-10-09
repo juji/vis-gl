@@ -1,11 +1,11 @@
 # Check for remote changes and build if needed
 branch=$(git rev-parse --abbrev-ref HEAD)
 
-echo "🔍 Fetching remote on $branch..."
+echo "🔍 Fetching origin on $branch..."
 
 if git fetch origin "$branch" 2>/dev/null; then
   if git diff --quiet HEAD origin/"$branch"; then
-    echo "✅ No changes detected from remote. Skipping build."
+    echo "✅ No changes detected from origin. Skipping build."
   else
     echo "🔄 Changes detected. Merging and building..."
     if git merge origin/"$branch" --no-edit; then
