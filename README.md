@@ -131,7 +131,7 @@ Progressive Web App features enabled via Serwist for offline capability and app-
 
 ## 📝 License
 
-Private project - not for public distribution.
+This project is for learning and educational purposes.
 
 ## 🔗 Resources
 
